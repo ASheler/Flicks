@@ -4,6 +4,7 @@ package com.glaserproject.flicks.RvAdapter;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -20,14 +21,25 @@ public class TileAdapter extends  RecyclerView.Adapter<TileAdapter.TileViewHolde
 
     Movie[] mMovies;
 
-    public TileAdapter (Movie[] movies){
+    public TileAdapter (Movie[] movies, TileAdapterOnClickHandler onClickHandler){
         mMovies = movies;
+        mClickHandler = onClickHandler;
     }
 
     public TileAdapter (){
-
+        mClickHandler = null;
     }
 
+
+    private final TileAdapterOnClickHandler mClickHandler;
+
+    public interface TileAdapterOnClickHandler {
+        void onClick(int movieId);
+    }
+
+    public TileAdapter (TileAdapterOnClickHandler onClickHandler){
+        mClickHandler = onClickHandler;
+    }
 
 
 
@@ -53,7 +65,7 @@ public class TileAdapter extends  RecyclerView.Adapter<TileAdapter.TileViewHolde
         return mMovies.length;
     }
 
-    public class TileViewHolder extends RecyclerView.ViewHolder{
+    public class TileViewHolder extends RecyclerView.ViewHolder implements OnClickListener{
         TextView text1;
         ImageView backgroundImage;
 
@@ -62,6 +74,7 @@ public class TileAdapter extends  RecyclerView.Adapter<TileAdapter.TileViewHolde
             super(itemView);
             text1 = itemView.findViewById(R.id.text1);
             backgroundImage = itemView.findViewById(R.id.backgroundImage);
+            itemView.setOnClickListener(this);
         }
 
         //Bind data - set content
@@ -70,6 +83,12 @@ public class TileAdapter extends  RecyclerView.Adapter<TileAdapter.TileViewHolde
                     .load("http://image.tmdb.org/t/p/w500/" + mMovies[index].getPosterPath())
                     .into(backgroundImage);
             text1.setText(mMovies[index].getMovieTitle());
+        }
+        
+        @Override
+        public void onClick (View v){
+            int adapterPosition = getAdapterPosition();
+            mClickHandler.onClick(mMovies[adapterPosition].getId());
         }
 
     }

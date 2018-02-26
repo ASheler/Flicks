@@ -2,16 +2,19 @@ package com.glaserproject.flicks;
 
 import android.app.LoaderManager;
 import android.content.Context;
-import android.content.Loader;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.LoaderManager.LoaderCallbacks;
+import android.support.v4.content.Loader;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.glaserproject.flicks.Movie.Movie;
 import com.glaserproject.flicks.NetUtils.MovieDbUtils;
@@ -19,7 +22,8 @@ import com.glaserproject.flicks.RvAdapter.TileAdapter;
 
 import java.net.URL;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements
+        TileAdapter.TileAdapterOnClickHandler {
         //implements TileAdapter.TileAdapterClickHandler, LoaderManager.LoaderCallbacks<String[]>{
 
     TextView textView;
@@ -49,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
         mMoviesRV.setLayoutManager(layoutManager);
         mMoviesRV.setHasFixedSize(true);
         //Initialize empty TileAdapter for better performance
-        mTileAdapter = new TileAdapter();
+        mTileAdapter = new TileAdapter(this);
         //set Adapter for RecyclerView
         mMoviesRV.setAdapter(mTileAdapter);
 
@@ -64,6 +68,11 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
+    @Override
+    public void onClick(int movieId) {
+        Toast.makeText(this, "" + movieId, Toast.LENGTH_SHORT).show();
+    }
 
 
     public class loadJSON extends AsyncTask<Movie[], Void, Movie[]>{

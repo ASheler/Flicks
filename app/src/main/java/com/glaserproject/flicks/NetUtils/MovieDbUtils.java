@@ -30,6 +30,7 @@ public class MovieDbUtils {
 
     //JSON variables
     public static final String JSON_RESULTS_KEY = "results";
+    public static final String JSON_MOVIEID_KEY = "id";
     public static final String JSON_VOTECOUNT_KEY = "vote_count";
     public static final String JSON_VOTEAVERAGE_KEY = "vote_average";
     public static final String JSON_MOVIETITLE_KEY = "title";
@@ -91,6 +92,7 @@ public class MovieDbUtils {
 
     //Get JSON into Simple Strings
     public static Movie[] parseMovieJSON (String json) throws JSONException {
+        int id;
         int voteCount;
         String voteAverage;
         String movieTitle;
@@ -119,6 +121,7 @@ public class MovieDbUtils {
 
             JSONObject results = resultsRoot.getJSONObject(i);
 
+            id = results.optInt(JSON_MOVIEID_KEY, 0);
             voteCount = results.optInt(JSON_VOTECOUNT_KEY, 9999);
             voteAverage = results.optString(JSON_VOTEAVERAGE_KEY, "NOT FOUND");
             movieTitle = results.optString(JSON_MOVIETITLE_KEY, "NOT FOUND");
@@ -140,6 +143,7 @@ public class MovieDbUtils {
             releaseDate = results.optString(JSON_RELEASEDATE_KEY, "NOT FOUND");
 
             tempMovie = new Movie(
+                    id,
                     voteCount,
                     voteAverage,
                     movieTitle,

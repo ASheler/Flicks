@@ -8,7 +8,7 @@ import java.util.List;
 
 public class Movie {
 
-
+    private int id;
     private int voteCount;
     private String voteAverage;
     private String movieTitle;
@@ -25,10 +25,11 @@ public class Movie {
     public Movie (){
     }
 
-    public Movie (int voteCount, String voteAverage, String movieTitle, String popularity,
+    public Movie (int id, int voteCount, String voteAverage, String movieTitle, String popularity,
                   String posterPath, String origLang, String origTitle, List<Integer> genres, String backdropPath,
                   boolean adult, String overview, String releaseDate){
 
+        this.id = id;
         this.voteCount = voteCount;
         this.voteAverage = voteAverage;
         this.movieTitle = movieTitle;
@@ -43,6 +44,9 @@ public class Movie {
         this.releaseDate = releaseDate;
     }
 
+    public int getId (){
+        return id;
+    }
     public int getVoteCount (){
         return voteCount;
     }
