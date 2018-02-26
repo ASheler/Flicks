@@ -1,4 +1,4 @@
-package com.glaserproject.flicks.NetUtils;
+package com.glaserproject.flicks.Utils;
 
 import android.net.Uri;
 

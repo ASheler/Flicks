@@ -1,13 +1,10 @@
 package com.glaserproject.flicks;
 
-import android.app.LoaderManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v4.app.LoaderManager.LoaderCallbacks;
-import android.support.v4.content.Loader;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,7 +14,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.glaserproject.flicks.Movie.Movie;
-import com.glaserproject.flicks.NetUtils.MovieDbUtils;
+import com.glaserproject.flicks.Utils.ConstantsClass;
+import com.glaserproject.flicks.Utils.MovieDbUtils;
 import com.glaserproject.flicks.RvAdapter.TileAdapter;
 
 import java.net.URL;
@@ -71,7 +69,9 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onClick(int movieId) {
-        Toast.makeText(this, "" + movieId, Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, DetailActivity.class);
+        intent.putExtra(ConstantsClass.MOVIE_ID_INTENT_EXTRA_KEY, movieId);
+        startActivity(intent);
     }
 
 
