@@ -44,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
 
         //setup RecyclerView & Layout Manager
         GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
+        //set AutoMeasure Off to fully load on screen
+        layoutManager.setAutoMeasureEnabled(false);
         mMoviesRV.setLayoutManager(layoutManager);
         mMoviesRV.setHasFixedSize(true);
         //Initialize empty TileAdapter for better performance

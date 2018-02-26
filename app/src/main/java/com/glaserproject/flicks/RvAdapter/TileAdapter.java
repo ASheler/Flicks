@@ -5,10 +5,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.glaserproject.flicks.Movie.Movie;
 import com.glaserproject.flicks.R;
+import com.squareup.picasso.Picasso;
 
 /**
  * Tile Adapter for Main RecyclerView
@@ -53,15 +55,20 @@ public class TileAdapter extends  RecyclerView.Adapter<TileAdapter.TileViewHolde
 
     public class TileViewHolder extends RecyclerView.ViewHolder{
         TextView text1;
+        ImageView backgroundImage;
 
         //initialize IDs in ViewHolder
         public TileViewHolder(View itemView) {
             super(itemView);
             text1 = itemView.findViewById(R.id.text1);
+            backgroundImage = itemView.findViewById(R.id.backgroundImage);
         }
 
         //Bind data - set content
         void bind (int index){
+            Picasso.with(itemView.getContext())
+                    .load("http://image.tmdb.org/t/p/w500/" + mMovies[index].getPosterPath())
+                    .into(backgroundImage);
             text1.setText(mMovies[index].getMovieTitle());
         }
 
