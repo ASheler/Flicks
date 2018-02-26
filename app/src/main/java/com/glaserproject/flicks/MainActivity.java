@@ -23,10 +23,10 @@ public class MainActivity extends AppCompatActivity {
         //implements TileAdapter.TileAdapterClickHandler, LoaderManager.LoaderCallbacks<String[]>{
 
     TextView textView;
-    private ProgressBar mLoadingIndicator;
+    ProgressBar mLoadingIndicator;
 
     TileAdapter mTileAdapter;
-    private RecyclerView mMoviesRV;
+    RecyclerView mMoviesRV;
 
 
 
@@ -38,21 +38,25 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //Find Views in layout
         mLoadingIndicator = findViewById(R.id.loading_indicator_pb);
-
-        mLoadingIndicator.setVisibility(View.VISIBLE);
-
         mMoviesRV = findViewById(R.id.movies_rv);
+
+        //setup RecyclerView & Layout Manager
         GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
         mMoviesRV.setLayoutManager(layoutManager);
         mMoviesRV.setHasFixedSize(true);
+        //Initialize empty TileAdapter for better performance
         mTileAdapter = new TileAdapter();
+        //set Adapter for RecyclerView
         mMoviesRV.setAdapter(mTileAdapter);
 
-
+        //check Network availability
         if (isNetworkAvailable(this)) {
+            //connected - load data
             new loadJSON().execute();
         } else {
+            //set error message on no connection
             textView.setText("NO CONNECTION");
         }
 
@@ -65,16 +69,22 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            //show loading Icon
+            mLoadingIndicator.setVisibility(View.VISIBLE);
         }
 
         @Override
         protected Movie[] doInBackground(Movie[]... movies) {
 
+            //build URL for JSON parsing
             URL weatherRequestUrl = MovieDbUtils.buildUrl();
 
             try {
+                //get JSON from URL
                 String jsonWeatherResponse = MovieDbUtils.getJSONFromUrl(weatherRequestUrl);
+                //parse data from JSON
                 Movie[] movie = MovieDbUtils.parseMovieJSON(jsonWeatherResponse);
+
                 return movie;
 
             } catch (Exception e) {
@@ -86,16 +96,17 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Movie[] movies) {
             super.onPostExecute(movies);
+            //set Loading Icon INVISIBLE
             mLoadingIndicator.setVisibility(View.INVISIBLE);
+            //Update UI
             updateUI(movies);
 
         }
     }
 
-
+    //update UI with new data
     public void updateUI(Movie[] movies){
         mTileAdapter.setMovieData(movies);
-        mTileAdapter.notifyDataSetChanged();
     }
 
 
