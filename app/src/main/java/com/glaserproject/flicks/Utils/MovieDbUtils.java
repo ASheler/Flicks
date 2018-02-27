@@ -25,6 +25,8 @@ public class MovieDbUtils {
 
     //URL variables
     private final static String MOVIE_DB_API_KEY = "e55aedf14cf9d30387a9a34d7d511bdc";
+    private final static String MOVIE_DB_API_KEY_STRING = "api_key";
+    private final static String MOVIE_DB_URL_BASE = "http://api.themoviedb.org/3/";
     private final static String MOVIE_DB_PATH_MOVIE = "movie";
     private final static String MOVIE_DB_PATH_POPULAR = "popular";
 
@@ -48,10 +50,10 @@ public class MovieDbUtils {
     public static URL buildUrl (){
 
         //build URI basic
-        Uri builtUri = Uri.parse("http://api.themoviedb.org/3/").buildUpon()
+        Uri builtUri = Uri.parse(MOVIE_DB_URL_BASE).buildUpon()
                 .appendPath(MOVIE_DB_PATH_MOVIE)
                 .appendPath(MOVIE_DB_PATH_POPULAR)
-                .appendQueryParameter("api_key", MOVIE_DB_API_KEY)
+                .appendQueryParameter(MOVIE_DB_API_KEY_STRING, MOVIE_DB_API_KEY)
                 .build();
 
         URL url = null;
@@ -61,6 +63,22 @@ public class MovieDbUtils {
             e.printStackTrace();
         }
         //return built url
+        return url;
+    }
+
+    public static URL buildMovieUrl (int movieID){
+        Uri builtUri = Uri.parse(MOVIE_DB_URL_BASE).buildUpon()
+                .appendPath(MOVIE_DB_PATH_MOVIE)
+                .appendPath(Integer.toString(movieID))
+                .appendQueryParameter(MOVIE_DB_API_KEY_STRING, MOVIE_DB_API_KEY)
+                .build();
+        URL url = null;
+        try {
+            url = new URL(builtUri.toString());
+        } catch (MalformedURLException e){
+            e.printStackTrace();
+        }
+
         return url;
     }
 

@@ -14,7 +14,7 @@ public class DetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-
+        //get intent that lead to this Activity
         Intent intent = getIntent();
         int movieID = intent.getExtras().getInt(ConstantsClass.MOVIE_ID_INTENT_EXTRA_KEY, 0);
 
