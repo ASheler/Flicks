@@ -9,6 +9,6 @@ public class ConstantsClass {
     public static String BACKDROP_PATH_INTENT_EXTRA_KEY = "movie_backdrop_path";
     public static String TITLE_INTENT_EXTRA_KEY = "movie_title";
     public static String RELEASE_DATE_INTENT_EXTRA_KEY = "release_date";
-
+    public static String URL_PICTURE_BASE_W500 = "http://image.tmdb.org/t/p/w500/";
 
 }

@@ -1,7 +1,6 @@
 package com.glaserproject.flicks.RvAdapter;
 
 
-import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,37 +11,22 @@ import android.widget.TextView;
 
 import com.glaserproject.flicks.Movie.Movie;
 import com.glaserproject.flicks.R;
+import com.glaserproject.flicks.Utils.ConstantsClass;
 import com.squareup.picasso.Picasso;
 
 /**
  * Tile Adapter for Main RecyclerView
  */
 
-public class TileAdapter extends  RecyclerView.Adapter<TileAdapter.TileViewHolder>{
-
-    Movie[] mMovies;
-
-    public TileAdapter (Movie[] movies, TileAdapterOnClickHandler onClickHandler){
-        mMovies = movies;
-        mClickHandler = onClickHandler;
-    }
-
-    public TileAdapter (){
-        mClickHandler = null;
-    }
-
+public class TileAdapter extends RecyclerView.Adapter<TileAdapter.TileViewHolder> {
 
     private final TileAdapterOnClickHandler mClickHandler;
+    Movie[] mMovies;
 
-    public interface TileAdapterOnClickHandler {
-        void onClick(Movie movie);
-    }
-
-    public TileAdapter (TileAdapterOnClickHandler onClickHandler){
+    //initialize TileAdapter w/ click handler
+    public TileAdapter(TileAdapterOnClickHandler onClickHandler) {
         mClickHandler = onClickHandler;
     }
-
-
 
     @Override
     public TileViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -60,13 +44,24 @@ public class TileAdapter extends  RecyclerView.Adapter<TileAdapter.TileViewHolde
 
     @Override
     public int getItemCount() {
-        if (mMovies == null){
+        if (mMovies == null) {
             return 0;
         }
         return mMovies.length;
     }
 
-    public class TileViewHolder extends RecyclerView.ViewHolder implements OnClickListener{
+    //set whole new set of data
+    public void setMovieData(Movie[] movies) {
+        mMovies = movies;
+        notifyDataSetChanged();
+    }
+
+    //click Interface
+    public interface TileAdapterOnClickHandler {
+        void onClick(Movie movie);
+    }
+
+    public class TileViewHolder extends RecyclerView.ViewHolder implements OnClickListener {
         TextView text1;
         ImageView backgroundImage;
         View bckgView;
@@ -83,25 +78,19 @@ public class TileAdapter extends  RecyclerView.Adapter<TileAdapter.TileViewHolde
         }
 
         //Bind data - set content
-        void bind (int index){
+        void bind(int index) {
             //text1.setLetterSpacing(0.2f);
             Picasso.with(itemView.getContext())
-                    .load("http://image.tmdb.org/t/p/w500/" + mMovies[index].getPosterPath())
+                    .load(ConstantsClass.URL_PICTURE_BASE_W500 + mMovies[index].getPosterPath())
                     .into(backgroundImage);
             text1.setText(mMovies[index].getMovieTitle());
         }
-        
+
         @Override
-        public void onClick (View v){
+        public void onClick(View v) {
             int adapterPosition = getAdapterPosition();
             mClickHandler.onClick(mMovies[adapterPosition]);
         }
 
-    }
-
-    //set whole new set of data
-    public void setMovieData (Movie[] movies){
-        mMovies = movies;
-        notifyDataSetChanged();
     }
 }

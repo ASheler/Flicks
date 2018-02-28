@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Scanner;
 
 /**
- *  Internet & JSON utils
+ * Internet & JSON utils
  */
 
 public class MovieDbUtils {
@@ -53,19 +53,25 @@ public class MovieDbUtils {
     public static final String JSON_REVENUE_KEY = "revenue";
 
 
-
-    public static URL buildUrl (int streamSelection){
+    public static URL buildUrl(int streamSelection) {
         String currentEndPoint;
-        switch (streamSelection){
-            case 0: currentEndPoint = MOVIE_DB_PATH_POPULAR;
-            break;
-            case 1: currentEndPoint = MOVIE_DB_PATH_TOP_RATED;
-            break;
-            case 2: currentEndPoint = MOVIE_DB_PATH_NOW_PLAYING;
-            break;
-            case 3: currentEndPoint = MOVIE_DB_PATH_UPCOMING;
-            break;
-            default: currentEndPoint = MOVIE_DB_PATH_POPULAR;
+
+        //get different path for different sort selection
+        switch (streamSelection) {
+            case 0:
+                currentEndPoint = MOVIE_DB_PATH_POPULAR;
+                break;
+            case 1:
+                currentEndPoint = MOVIE_DB_PATH_TOP_RATED;
+                break;
+            case 2:
+                currentEndPoint = MOVIE_DB_PATH_NOW_PLAYING;
+                break;
+            case 3:
+                currentEndPoint = MOVIE_DB_PATH_UPCOMING;
+                break;
+            default:
+                currentEndPoint = MOVIE_DB_PATH_POPULAR;
 
         }
 
@@ -86,7 +92,8 @@ public class MovieDbUtils {
         return url;
     }
 
-    public static URL buildMovieUrl (int movieID){
+    //build URL for Movie Detail
+    public static URL buildMovieUrl(int movieID) {
         Uri builtUri = Uri.parse(MOVIE_DB_URL_BASE).buildUpon()
                 .appendPath(MOVIE_DB_PATH_MOVIE)
                 .appendPath(Integer.toString(movieID))
@@ -95,26 +102,26 @@ public class MovieDbUtils {
         URL url = null;
         try {
             url = new URL(builtUri.toString());
-        } catch (MalformedURLException e){
+        } catch (MalformedURLException e) {
             e.printStackTrace();
         }
 
         return url;
     }
 
-        //get stream from URL
-    public static String getJSONFromUrl (URL url) throws IOException {
+    //get stream from URL
+    public static String getJSONFromUrl(URL url) throws IOException {
 
         //open url connection
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
         try {
             InputStream inputStream = urlConnection.getInputStream();
-                //setup scanner
+            //setup scanner
             Scanner scanner = new Scanner(inputStream);
             scanner.useDelimiter("\\A");
 
             boolean hasInput = scanner.hasNext();
-            if (hasInput){
+            if (hasInput) {
                 //return scanned item
                 return scanner.next();
             } else {
@@ -128,15 +135,13 @@ public class MovieDbUtils {
     }
 
     //Get JSON Movie Detail into Simple Strings
-    public static Movie parseMovieDetailJSON (String json) throws JSONException {
+    public static Movie parseMovieDetailJSON(String json) throws JSONException {
         String tagline;
         int revenue;
         String overview;
         int budget;
         String popularity;
         String voteAverage;
-
-
 
         JSONObject jsonRoot = new JSONObject(json);
         tagline = jsonRoot.optString(JSON_TAGLINE_KEY, "NOT FOUND");
@@ -146,6 +151,7 @@ public class MovieDbUtils {
         popularity = jsonRoot.optString(JSON_POPULARITY_KEY, "NOT FOUND");
         voteAverage = jsonRoot.optString(JSON_VOTEAVERAGE_KEY, "NOT FOUND");
 
+        //create movie to be send to Detail Activity
         Movie movie = new Movie(tagline, revenue, overview, budget, popularity, voteAverage);
 
         return movie;
@@ -153,7 +159,7 @@ public class MovieDbUtils {
 
 
     //Get JSON All Movies into Simple Strings
-    public static Movie[] parseMovieJSON (String json) throws JSONException {
+    public static Movie[] parseMovieJSON(String json) throws JSONException {
         int id;
         int voteCount;
         String voteAverage;
@@ -168,23 +174,23 @@ public class MovieDbUtils {
         String overview;
         String releaseDate;
 
-
-
-
+        //get JSONObject - rood
         JSONObject jsonRoot = new JSONObject(json);
         JSONArray resultsRoot = jsonRoot.optJSONArray(JSON_RESULTS_KEY);
 
+        //initialize Movie[] variable
         Movie[] movie = new Movie[resultsRoot.length()];
 
+        //continually load into Movie[] var
+        for (int i = 0; i < resultsRoot.length(); i++) {
 
-        for (int i = 0; i < resultsRoot.length(); i++){
-
+            //create tempMovie for temporarily storing Movie vars
             Movie tempMovie;
 
             JSONObject results = resultsRoot.getJSONObject(i);
 
             id = results.optInt(JSON_MOVIEID_KEY, 0);
-            voteCount = results.optInt(JSON_VOTECOUNT_KEY, 9999);
+            voteCount = results.optInt(JSON_VOTECOUNT_KEY, 0);
             voteAverage = results.optString(JSON_VOTEAVERAGE_KEY, "NOT FOUND");
             movieTitle = results.optString(JSON_MOVIETITLE_KEY, "NOT FOUND");
             popularity = results.optString(JSON_POPULARITY_KEY, "NOT FOUND");
@@ -204,6 +210,7 @@ public class MovieDbUtils {
             overview = results.optString(JSON_OVERVIEW_KEY, "NOT FOUND");
             releaseDate = results.optString(JSON_RELEASEDATE_KEY, "NOT FOUND");
 
+            //put data into Movie var
             tempMovie = new Movie(
                     id,
                     voteCount,
@@ -226,11 +233,6 @@ public class MovieDbUtils {
 
         return movie;
     }
-
-
-
-
-
 
 
 }

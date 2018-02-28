@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!--Movie Stream Selection Spinner-->
     <string-array name="movie_spinner_choices">
         <item>Popular</item>
         <item>Top Rated</item>

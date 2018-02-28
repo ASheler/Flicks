@@ -1,8 +1,5 @@
 package com.glaserproject.flicks.Movie;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import java.util.List;
 
 /**
@@ -29,12 +26,13 @@ public class Movie {
     private int budget;
 
 
-    public Movie (){
+    public Movie() {
     }
+
     //full movie
-    public Movie (int id, int voteCount, String voteAverage, String movieTitle, String popularity,
-                  String posterPath, String origLang, String origTitle, List<Integer> genres, String backdropPath,
-                  boolean adult, String overview, String releaseDate){
+    public Movie(int id, int voteCount, String voteAverage, String movieTitle, String popularity,
+                 String posterPath, String origLang, String origTitle, List<Integer> genres, String backdropPath,
+                 boolean adult, String overview, String releaseDate) {
 
         this.id = id;
         this.voteCount = voteCount;
@@ -52,7 +50,7 @@ public class Movie {
     }
 
     //Movie Detail
-    public Movie (String tagline, int revenue, String overview, int budget, String popularity, String voteAverage){
+    public Movie(String tagline, int revenue, String overview, int budget, String popularity, String voteAverage) {
         this.tagline = tagline;
         this.revenue = revenue;
         this.overview = overview;
@@ -63,54 +61,68 @@ public class Movie {
     }
 
 
-
-
-    public int getId (){
+    //getters
+    public int getId() {
         return id;
     }
-    public int getVoteCount (){
+
+    public int getVoteCount() {
         return voteCount;
     }
-    public String getVoteAverage (){
+
+    public String getVoteAverage() {
         return voteAverage;
     }
-    public String getMovieTitle (){
+
+    public String getMovieTitle() {
         return movieTitle;
     }
-    public String getPopularity (){
+
+    public String getPopularity() {
         return popularity;
     }
-    public String getPosterPath (){
+
+    public String getPosterPath() {
         return posterPath;
     }
-    public String getOrigLang (){
+
+    public String getOrigLang() {
         return origLang;
     }
-    public String getOrigTitle (){
+
+    public String getOrigTitle() {
         return origTitle;
     }
-    public List<Integer> getGenres (){
+
+    public List<Integer> getGenres() {
         return genres;
     }
-    public String getBackdropPath (){
+
+    public String getBackdropPath() {
         return backdropPath;
     }
-    public boolean getAdult (){
+
+    public boolean getAdult() {
         return adult;
     }
-    public String getOverview (){
+
+    public String getOverview() {
         return overview;
     }
-    public String getReleaseDate (){
+
+    public String getReleaseDate() {
         return releaseDate;
     }
-    public String getTagline (){
+
+    public String getTagline() {
         return tagline;
     }
-    public int getRevenue (){
+
+    public int getRevenue() {
         return revenue;
     }
-    public int getBudget (){
+
+    public int getBudget() {
         return budget;
     }
 }

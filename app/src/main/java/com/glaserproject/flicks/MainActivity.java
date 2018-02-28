@@ -28,30 +28,25 @@ import java.net.URL;
 
 public class MainActivity extends AppCompatActivity implements
         TileAdapter.TileAdapterOnClickHandler {
-        //implements TileAdapter.TileAdapterClickHandler, LoaderManager.LoaderCallbacks<String[]>{
 
-    TextView textView;
-    ProgressBar mLoadingIndicator;
+    ProgressBar loadingIndicatorPB;
 
     TileAdapter mTileAdapter;
     RecyclerView mMoviesRV;
     int currentSelection;
 
 
-
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //set Toolbar
         Toolbar myToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
 
 
         //Find Views in layout
-        mLoadingIndicator = findViewById(R.id.loading_indicator_pb);
+        loadingIndicatorPB = findViewById(R.id.loading_indicator_pb);
         mMoviesRV = findViewById(R.id.movies_rv);
 
         //initialize selection
@@ -69,21 +64,13 @@ public class MainActivity extends AppCompatActivity implements
         //set Adapter for RecyclerView
         mMoviesRV.setAdapter(mTileAdapter);
 
-        //check Network availability
-        //TODO: Check for network!!!!!
-        /*if (isNetworkAvailable(this)) {
-            //connected - load data
-            new loadJSON().execute();
-        } else {
-            //set error message on no connection
-            textView.setText("NO CONNECTION");
-        }*/
 
     }
 
 
     @Override
     public void onClick(Movie movie) {
+        //onClick leads to Detail Activity
         Intent intent = new Intent(this, DetailActivity.class);
         intent.putExtra(ConstantsClass.MOVIE_ID_INTENT_EXTRA_KEY, movie.getId());
         intent.putExtra(ConstantsClass.BACKDROP_PATH_INTENT_EXTRA_KEY, movie.getBackdropPath());
@@ -94,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements
     }
 
 
-    public class loadJSON extends AsyncTask<Movie[], Void, Movie[]>{
+    public class loadJSON extends AsyncTask<Movie[], Void, Movie[]> {
 
 
         @Override
@@ -102,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements
             super.onPreExecute();
 
             //show loading Icon
-            mLoadingIndicator.setVisibility(View.VISIBLE);
+            loadingIndicatorPB.setVisibility(View.VISIBLE);
         }
 
         @Override
@@ -129,7 +116,7 @@ public class MainActivity extends AppCompatActivity implements
         protected void onPostExecute(Movie[] movies) {
             super.onPostExecute(movies);
             //set Loading Icon INVISIBLE
-            mLoadingIndicator.setVisibility(View.INVISIBLE);
+            loadingIndicatorPB.setVisibility(View.INVISIBLE);
             //Update UI
             updateUI(movies);
 
@@ -137,7 +124,7 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     //update UI with new data
-    public void updateUI(Movie[] movies){
+    public void updateUI(Movie[] movies) {
         mTileAdapter.setMovieData(movies);
     }
 
@@ -154,13 +141,16 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
+        //spinner
         MenuItem item = menu.findItem(R.id.spinner_menu);
         Spinner spinner = (Spinner) item.getActionView();
 
+        //adapter for spinner
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.movie_spinner_choices, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
+
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -184,7 +174,6 @@ public class MainActivity extends AppCompatActivity implements
 
             }
         });
-
 
 
         return true;
