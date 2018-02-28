@@ -29,6 +29,9 @@ public class MovieDbUtils {
     private final static String MOVIE_DB_URL_BASE = "http://api.themoviedb.org/3/";
     private final static String MOVIE_DB_PATH_MOVIE = "movie";
     private final static String MOVIE_DB_PATH_POPULAR = "popular";
+    private final static String MOVIE_DB_PATH_TOP_RATED = "top_rated";
+    private final static String MOVIE_DB_PATH_NOW_PLAYING = "now_playing";
+    private final static String MOVIE_DB_PATH_UPCOMING = "upcoming";
 
     //JSON variables
     public static final String JSON_RESULTS_KEY = "results";
@@ -45,14 +48,31 @@ public class MovieDbUtils {
     public static final String JSON_ADULT_KEY = "adult";
     public static final String JSON_OVERVIEW_KEY = "overview";
     public static final String JSON_RELEASEDATE_KEY = "release_date";
+    public static final String JSON_BUDGET_KEY = "budget";
+    public static final String JSON_TAGLINE_KEY = "tagline";
+    public static final String JSON_REVENUE_KEY = "revenue";
 
 
-    public static URL buildUrl (){
+
+    public static URL buildUrl (int streamSelection){
+        String currentEndPoint;
+        switch (streamSelection){
+            case 0: currentEndPoint = MOVIE_DB_PATH_POPULAR;
+            break;
+            case 1: currentEndPoint = MOVIE_DB_PATH_TOP_RATED;
+            break;
+            case 2: currentEndPoint = MOVIE_DB_PATH_NOW_PLAYING;
+            break;
+            case 3: currentEndPoint = MOVIE_DB_PATH_UPCOMING;
+            break;
+            default: currentEndPoint = MOVIE_DB_PATH_POPULAR;
+
+        }
 
         //build URI basic
         Uri builtUri = Uri.parse(MOVIE_DB_URL_BASE).buildUpon()
                 .appendPath(MOVIE_DB_PATH_MOVIE)
-                .appendPath(MOVIE_DB_PATH_POPULAR)
+                .appendPath(currentEndPoint)
                 .appendQueryParameter(MOVIE_DB_API_KEY_STRING, MOVIE_DB_API_KEY)
                 .build();
 
@@ -107,8 +127,32 @@ public class MovieDbUtils {
 
     }
 
+    //Get JSON Movie Detail into Simple Strings
+    public static Movie parseMovieDetailJSON (String json) throws JSONException {
+        String tagline;
+        int revenue;
+        String overview;
+        int budget;
+        String popularity;
+        String voteAverage;
 
-    //Get JSON into Simple Strings
+
+
+        JSONObject jsonRoot = new JSONObject(json);
+        tagline = jsonRoot.optString(JSON_TAGLINE_KEY, "NOT FOUND");
+        revenue = jsonRoot.optInt(JSON_REVENUE_KEY, 0);
+        overview = jsonRoot.optString(JSON_OVERVIEW_KEY, "NOT FOUND");
+        budget = jsonRoot.optInt(JSON_BUDGET_KEY, 0);
+        popularity = jsonRoot.optString(JSON_POPULARITY_KEY, "NOT FOUND");
+        voteAverage = jsonRoot.optString(JSON_VOTEAVERAGE_KEY, "NOT FOUND");
+
+        Movie movie = new Movie(tagline, revenue, overview, budget, popularity, voteAverage);
+
+        return movie;
+    }
+
+
+    //Get JSON All Movies into Simple Strings
     public static Movie[] parseMovieJSON (String json) throws JSONException {
         int id;
         int voteCount;
@@ -182,6 +226,10 @@ public class MovieDbUtils {
 
         return movie;
     }
+
+
+
+
 
 
 

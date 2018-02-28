@@ -1,6 +1,7 @@
 package com.glaserproject.flicks.RvAdapter;
 
 
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,7 +35,7 @@ public class TileAdapter extends  RecyclerView.Adapter<TileAdapter.TileViewHolde
     private final TileAdapterOnClickHandler mClickHandler;
 
     public interface TileAdapterOnClickHandler {
-        void onClick(int movieId);
+        void onClick(Movie movie);
     }
 
     public TileAdapter (TileAdapterOnClickHandler onClickHandler){
@@ -68,10 +69,14 @@ public class TileAdapter extends  RecyclerView.Adapter<TileAdapter.TileViewHolde
     public class TileViewHolder extends RecyclerView.ViewHolder implements OnClickListener{
         TextView text1;
         ImageView backgroundImage;
+        View bckgView;
 
         //initialize IDs in ViewHolder
         public TileViewHolder(View itemView) {
             super(itemView);
+
+            bckgView = itemView.findViewById(R.id.view);
+
             text1 = itemView.findViewById(R.id.text1);
             backgroundImage = itemView.findViewById(R.id.backgroundImage);
             itemView.setOnClickListener(this);
@@ -79,6 +84,7 @@ public class TileAdapter extends  RecyclerView.Adapter<TileAdapter.TileViewHolde
 
         //Bind data - set content
         void bind (int index){
+            //text1.setLetterSpacing(0.2f);
             Picasso.with(itemView.getContext())
                     .load("http://image.tmdb.org/t/p/w500/" + mMovies[index].getPosterPath())
                     .into(backgroundImage);
@@ -88,7 +94,7 @@ public class TileAdapter extends  RecyclerView.Adapter<TileAdapter.TileViewHolde
         @Override
         public void onClick (View v){
             int adapterPosition = getAdapterPosition();
-            mClickHandler.onClick(mMovies[adapterPosition].getId());
+            mClickHandler.onClick(mMovies[adapterPosition]);
         }
 
     }

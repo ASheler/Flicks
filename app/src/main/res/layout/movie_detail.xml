@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/tagline_tv"
+        android:layout_width="368dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:textSize="20sp"
+        android:textStyle="bold|italic"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Reports of my death have been greatly exaggerated." />
+
+    <TextView
+        android:id="@+id/overview_label_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:text="Overview:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tagline_tv" />
+
+    <TextView
+        android:id="@+id/overview_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/overview_label_tv"
+        tools:text="When an attack on the Kingsman headquarters takes place and a new villain rises, Eggsy and Merlin are forced to work together with the American agency known as the Statesman to save the world." />
+
+    <TextView
+        android:id="@+id/budget_label_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Budget"
+        app:layout_constraintEnd_toStartOf="@+id/revenue_label_tv"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/overview_tv" />
+
+    <TextView
+        android:id="@+id/revenue_label_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Revenue"
+        app:layout_constraintEnd_toStartOf="@+id/popularity_label_tv"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/budget_label_tv"
+        app:layout_constraintTop_toBottomOf="@+id/overview_tv" />
+
+    <TextView
+        android:id="@+id/popularity_label_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Popularity"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/revenue_label_tv"
+        app:layout_constraintTop_toBottomOf="@+id/overview_tv" />
+
+    <TextView
+        android:id="@+id/budget_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="@+id/budget_label_tv"
+        app:layout_constraintStart_toStartOf="@+id/budget_label_tv"
+        app:layout_constraintTop_toBottomOf="@+id/budget_label_tv"
+        tools:text="104000000" />
+
+    <TextView
+        android:id="@+id/revenue_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="@+id/revenue_label_tv"
+        app:layout_constraintStart_toStartOf="@+id/revenue_label_tv"
+        app:layout_constraintTop_toBottomOf="@+id/revenue_label_tv"
+        tools:text="394247609" />
+
+    <TextView
+        android:id="@+id/popularity_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="@+id/popularity_label_tv"
+        app:layout_constraintStart_toStartOf="@+id/popularity_label_tv"
+        app:layout_constraintTop_toBottomOf="@+id/popularity_label_tv"
+        tools:text="271.636871" />
+
+    <TextView
+        android:id="@+id/releaseDate_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/releaseDate_label_tv"
+        tools:text="2017-12-12" />
+
+    <TextView
+        android:id="@+id/releaseDate_label_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="32dp"
+        android:text="Release date: "
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/budget_tv" />
+
+    <TextView
+        android:id="@+id/voteAverage_label_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="24dp"
+        android:text="Vote Average"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/releaseDate_tv" />
+
+    <TextView
+        android:id="@+id/voteAverage_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="8dp"
+        tools:text="TextView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/voteAverage_label_tv" />
+
+
+</android.support.constraint.ConstraintLayout>
