@@ -1,8 +1,11 @@
 <resources>
+
     <!-- App strings -->
     <string name="app_name">Flicks</string>
+
     <!-- Main Activity Strings -->
     <string name="movie_poster_content_description">Movie Poster</string>
+
     <!-- Detail Activity Strings -->
     <string name="overview_label">Overview:</string>
     <string name="budget_label">Budget</string>
@@ -10,4 +13,7 @@
     <string name="popularity_label">Popularity</string>
     <string name="release_date_label">Release date:</string>
     <string name="vote_average_label">Vote Average</string>
+    <string name="no_connection_message">NO CONNECTION AVAILABLE… \n Please check your connection and try again.</string>
+    <string name="reload">Reload</string>
+    <string name="no_connection_toast">No connection Available. Try again later.</string>
 </resources>

@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -30,6 +31,8 @@ public class MainActivity extends AppCompatActivity implements
         TileAdapter.TileAdapterOnClickHandler {
 
     ProgressBar loadingIndicatorPB;
+
+    Button reloadButton;
 
     TileAdapter mTileAdapter;
     RecyclerView mMoviesRV;
@@ -48,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements
         //Find Views in layout
         loadingIndicatorPB = findViewById(R.id.loading_indicator_pb);
         mMoviesRV = findViewById(R.id.movies_rv);
+        reloadButton = findViewById(R.id.reloadButton);
 
         //initialize selection
         currentSelection = 0;
@@ -65,6 +69,19 @@ public class MainActivity extends AppCompatActivity implements
         mMoviesRV.setAdapter(mTileAdapter);
 
 
+        //setup Reload Button
+        reloadButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isNetworkAvailable(getApplicationContext())) {
+                    recreate();
+                    reloadButton.setVisibility(View.GONE);
+                } else {
+                    Toast.makeText(MainActivity.this, R.string.no_connection_toast, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
     }
 
 
@@ -80,6 +97,63 @@ public class MainActivity extends AppCompatActivity implements
         startActivity(intent);
     }
 
+    //update UI with new data
+    public void updateUI(Movie[] movies) {
+        mTileAdapter.setMovieData(movies);
+    }
+
+    //Check if Network connection is available
+    public boolean isNetworkAvailable(Context context) {
+        //set connectivity manager
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        //check if ActiveNetwork isn't null && is Connected
+        return connectivityManager.getActiveNetworkInfo() != null && connectivityManager.getActiveNetworkInfo().isConnected();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        //spinner
+        MenuItem item = menu.findItem(R.id.spinner_menu);
+        Spinner spinner = (Spinner) item.getActionView();
+
+        //adapter for spinner
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.movie_spinner_choices, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                currentSelection = position;
+                //If connection available - load!
+                if (isNetworkAvailable(MainActivity.this)) {
+                    //hide Reload Button
+                    reloadButton.setVisibility(View.GONE);
+                    //connected - load data
+                    new loadJSON().execute();
+                } else {
+                    //hide Reload Button
+                    reloadButton.setVisibility(View.VISIBLE);
+                    //set error message on no connection
+                    Toast.makeText(MainActivity.this, R.string.no_connection_toast, Toast.LENGTH_SHORT).show();
+                }
+
+                //new loadJSON().execute();
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+
+        return true;
+    }
 
     public class loadJSON extends AsyncTask<Movie[], Void, Movie[]> {
 
@@ -121,62 +195,6 @@ public class MainActivity extends AppCompatActivity implements
             updateUI(movies);
 
         }
-    }
-
-    //update UI with new data
-    public void updateUI(Movie[] movies) {
-        mTileAdapter.setMovieData(movies);
-    }
-
-
-    //Check if Network connection is available
-    public boolean isNetworkAvailable(Context context) {
-        //set connectivity manager
-        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        //check if ActiveNetwork isn't null && is Connected
-        return connectivityManager.getActiveNetworkInfo() != null && connectivityManager.getActiveNetworkInfo().isConnected();
-    }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu, menu);
-        //spinner
-        MenuItem item = menu.findItem(R.id.spinner_menu);
-        Spinner spinner = (Spinner) item.getActionView();
-
-        //adapter for spinner
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.movie_spinner_choices, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
-
-
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                currentSelection = position;
-                //If connection available - load!
-                if (isNetworkAvailable(MainActivity.this)) {
-                    //connected - load data
-                    new loadJSON().execute();
-                } else {
-                    //set error message on no connection
-                    Toast.makeText(MainActivity.this, "No connection Available. Try again later.", Toast.LENGTH_SHORT).show();
-                }
-
-                //new loadJSON().execute();
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-
-        return true;
     }
 
 

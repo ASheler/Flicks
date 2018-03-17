@@ -18,6 +18,7 @@ import com.glaserproject.flicks.Utils.MovieDbUtils;
 import com.squareup.picasso.Picasso;
 
 import java.net.URL;
+import java.text.NumberFormat;
 
 public class DetailActivity extends AppCompatActivity {
 
@@ -75,17 +76,54 @@ public class DetailActivity extends AppCompatActivity {
         voteAverageLabelTV = findViewById(R.id.voteAverage_label_tv);
 
 
-
         if (isNetworkAvailable(this)) {
             new loadDataFromJSON().execute();
         } else {
-            //TODO add no Internet message
+            //Set no connection message as Tagline below image
             taglineTV.setVisibility(View.VISIBLE);
-            taglineTV.setText("NO INTERNET");
+            taglineTV.setText(R.string.no_connection_message);
         }
 
     }
 
+    public void updateUI(Movie movie) {
+        //first make UI elements visible
+        showUIelements();
+
+        //get and format integers
+        String budgetString = NumberFormat.getCurrencyInstance().format(movie.getBudget());
+        String revenueString = NumberFormat.getCurrencyInstance().format(movie.getRevenue());
+
+        //update TVs
+        taglineTV.setText(movie.getTagline());
+        overviewTV.setText(movie.getOverview());
+        budgetTV.setText(budgetString);
+        revenueTV.setText(revenueString);
+        popularityTV.setText(movie.getPopularity());
+        releaseDateTV.setText(releaseDate);
+        voteAverageTV.setText(movie.getVoteAverage());
+
+
+    }
+
+    //set all UI elements visible
+    public void showUIelements() {
+        overviewLabelTV.setVisibility(View.VISIBLE);
+        budgetLabelTV.setVisibility(View.VISIBLE);
+        revenueLabelTV.setVisibility(View.VISIBLE);
+        popularityLabelTV.setVisibility(View.VISIBLE);
+        releaseDateLabelTV.setVisibility(View.VISIBLE);
+        voteAverageLabelTV.setVisibility(View.VISIBLE);
+
+    }
+
+    //Check if Network connection is available
+    public boolean isNetworkAvailable(Context context) {
+        //set connectivity manager
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        //check if ActiveNetwork isn't null && is Connected
+        return connectivityManager.getActiveNetworkInfo() != null && connectivityManager.getActiveNetworkInfo().isConnected();
+    }
 
     public class loadDataFromJSON extends AsyncTask<Movie, Void, Movie> {
 
@@ -123,45 +161,6 @@ public class DetailActivity extends AppCompatActivity {
             //update UI
             updateUI(movie);
         }
-    }
-
-    public void updateUI(Movie movie) {
-
-        showUIelements();
-        taglineTV.setText(movie.getTagline());
-        overviewTV.setText(movie.getOverview());
-        budgetTV.setText(Integer.toString(movie.getBudget()));
-        revenueTV.setText(Integer.toString(movie.getRevenue()));
-        popularityTV.setText(movie.getPopularity());
-        releaseDateTV.setText(releaseDate);
-
-        //TODO: For some reason doesn't show average in some movies (COCO)
-        voteAverageTV.setText(movie.getVoteAverage());
-
-
-    }
-
-    public void showUIelements (){
-        overviewLabelTV.setVisibility(View.VISIBLE);
-        budgetLabelTV.setVisibility(View.VISIBLE);
-        revenueLabelTV.setVisibility(View.VISIBLE);
-        popularityLabelTV.setVisibility(View.VISIBLE);
-        releaseDateLabelTV.setVisibility(View.VISIBLE);
-        voteAverageLabelTV.setVisibility(View.VISIBLE);
-        releaseDateTV.setVisibility(View.VISIBLE);
-        voteAverageTV.setVisibility(View.VISIBLE);
-
-    }
-
-
-
-
-    //Check if Network connection is available
-    public boolean isNetworkAvailable(Context context) {
-        //set connectivity manager
-        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        //check if ActiveNetwork isn't null && is Connected
-        return connectivityManager.getActiveNetworkInfo() != null && connectivityManager.getActiveNetworkInfo().isConnected();
     }
 
 }

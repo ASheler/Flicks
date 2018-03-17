@@ -21,7 +21,7 @@ import com.squareup.picasso.Picasso;
 public class TileAdapter extends RecyclerView.Adapter<TileAdapter.TileViewHolder> {
 
     private final TileAdapterOnClickHandler mClickHandler;
-    Movie[] mMovies;
+    private Movie[] mMovies;
 
     //initialize TileAdapter w/ click handler
     public TileAdapter(TileAdapterOnClickHandler onClickHandler) {

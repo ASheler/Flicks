@@ -1,24 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="300dp"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/colorPrimaryDark"
-    >
-
+    android:background="@color/colorPrimaryDark">
 
 
     <ImageView
-        android:contentDescription="@string/movie_poster_content_description"
         android:id="@+id/backgroundImage"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:contentDescription="@string/movie_poster_content_description"
+        android:scaleType="centerCrop"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:scaleType="centerCrop"
-        />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <View
         android:id="@+id/view"
@@ -27,11 +24,10 @@
         android:layout_marginBottom="24dp"
         android:layout_marginEnd="32dp"
         android:background="@color/colorPrimary"
+        android:elevation="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:elevation="8dp"
-        />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/text1"
@@ -41,11 +37,11 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
+        android:elevation="8dp"
+        android:fontFamily="sans-serif-light"
+        android:letterSpacing="0.2"
         android:textAllCaps="true"
         android:textSize="15sp"
-        android:letterSpacing="0.2"
-        android:fontFamily="sans-serif-light"
-        android:elevation="8dp"
         app:layout_constraintBottom_toBottomOf="@+id/view"
         app:layout_constraintEnd_toEndOf="@+id/view"
         app:layout_constraintStart_toStartOf="parent"

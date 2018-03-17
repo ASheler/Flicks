@@ -23,16 +23,6 @@ import java.util.Scanner;
 
 public class MovieDbUtils {
 
-    //URL variables
-    private final static String MOVIE_DB_API_KEY = "e55aedf14cf9d30387a9a34d7d511bdc";
-    private final static String MOVIE_DB_API_KEY_STRING = "api_key";
-    private final static String MOVIE_DB_URL_BASE = "http://api.themoviedb.org/3/";
-    private final static String MOVIE_DB_PATH_MOVIE = "movie";
-    private final static String MOVIE_DB_PATH_POPULAR = "popular";
-    private final static String MOVIE_DB_PATH_TOP_RATED = "top_rated";
-    private final static String MOVIE_DB_PATH_NOW_PLAYING = "now_playing";
-    private final static String MOVIE_DB_PATH_UPCOMING = "upcoming";
-
     //JSON variables
     public static final String JSON_RESULTS_KEY = "results";
     public static final String JSON_MOVIEID_KEY = "id";
@@ -52,6 +42,15 @@ public class MovieDbUtils {
     public static final String JSON_TAGLINE_KEY = "tagline";
     public static final String JSON_REVENUE_KEY = "revenue";
 
+    //URL variables
+    private final static String MOVIE_DB_API_KEY = "put_your_api_here";  // MovieDB API Key removed for privacy issues. Get you
+    private final static String MOVIE_DB_API_KEY_STRING = "api_key";
+    private final static String MOVIE_DB_URL_BASE = "http://api.themoviedb.org/3/";
+    private final static String MOVIE_DB_PATH_MOVIE = "movie";
+    private final static String MOVIE_DB_PATH_POPULAR = "popular";
+    private final static String MOVIE_DB_PATH_TOP_RATED = "top_rated";
+    private final static String MOVIE_DB_PATH_NOW_PLAYING = "now_playing";
+    private final static String MOVIE_DB_PATH_UPCOMING = "upcoming";
 
     public static URL buildUrl(int streamSelection) {
         String currentEndPoint;
