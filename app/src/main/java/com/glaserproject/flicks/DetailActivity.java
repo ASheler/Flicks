@@ -1,6 +1,8 @@
 package com.glaserproject.flicks;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -21,6 +23,7 @@ public class DetailActivity extends AppCompatActivity {
 
     int movieID;
     TextView taglineTV, overviewTV, budgetTV, revenueTV, popularityTV, releaseDateTV, voteAverageTV;
+    TextView overviewLabelTV, budgetLabelTV, revenueLabelTV, popularityLabelTV, releaseDateLabelTV, voteAverageLabelTV;
     String releaseDate;
     ProgressBar loadingIndicatorPB;
 
@@ -64,10 +67,22 @@ public class DetailActivity extends AppCompatActivity {
         releaseDateTV = findViewById(R.id.releaseDate_tv);
         voteAverageTV = findViewById(R.id.voteAverage_tv);
         loadingIndicatorPB = findViewById(R.id.loading_indicator_pb);
+        overviewLabelTV = findViewById(R.id.overview_label_tv);
+        budgetLabelTV = findViewById(R.id.budget_label_tv);
+        revenueLabelTV = findViewById(R.id.revenue_label_tv);
+        popularityLabelTV = findViewById(R.id.popularity_label_tv);
+        releaseDateLabelTV = findViewById(R.id.releaseDate_label_tv);
+        voteAverageLabelTV = findViewById(R.id.voteAverage_label_tv);
 
-        //TODO: Check internet connection
-        new loadDataFromJSON().execute();
 
+
+        if (isNetworkAvailable(this)) {
+            new loadDataFromJSON().execute();
+        } else {
+            //TODO add no Internet message
+            taglineTV.setVisibility(View.VISIBLE);
+            taglineTV.setText("NO INTERNET");
+        }
 
     }
 
@@ -112,6 +127,7 @@ public class DetailActivity extends AppCompatActivity {
 
     public void updateUI(Movie movie) {
 
+        showUIelements();
         taglineTV.setText(movie.getTagline());
         overviewTV.setText(movie.getOverview());
         budgetTV.setText(Integer.toString(movie.getBudget()));
@@ -122,6 +138,30 @@ public class DetailActivity extends AppCompatActivity {
         //TODO: For some reason doesn't show average in some movies (COCO)
         voteAverageTV.setText(movie.getVoteAverage());
 
+
+    }
+
+    public void showUIelements (){
+        overviewLabelTV.setVisibility(View.VISIBLE);
+        budgetLabelTV.setVisibility(View.VISIBLE);
+        revenueLabelTV.setVisibility(View.VISIBLE);
+        popularityLabelTV.setVisibility(View.VISIBLE);
+        releaseDateLabelTV.setVisibility(View.VISIBLE);
+        voteAverageLabelTV.setVisibility(View.VISIBLE);
+        releaseDateTV.setVisibility(View.VISIBLE);
+        voteAverageTV.setVisibility(View.VISIBLE);
+
+    }
+
+
+
+
+    //Check if Network connection is available
+    public boolean isNetworkAvailable(Context context) {
+        //set connectivity manager
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        //check if ActiveNetwork isn't null && is Connected
+        return connectivityManager.getActiveNetworkInfo() != null && connectivityManager.getActiveNetworkInfo().isConnected();
     }
 
 }

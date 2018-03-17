@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:showIn="@layout/activity_detail">
+    android:layout_height="match_parent">
 
     <TextView
         android:id="@+id/tagline_tv"
@@ -19,7 +18,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="Reports of my death have been greatly exaggerated." />
+        tools:text="Reports of my death have been greatly exaggerated."
+        />
 
     <TextView
         android:id="@+id/overview_label_tv"
@@ -28,6 +28,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:text="@string/overview_label"
+        android:visibility="invisible"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tagline_tv" />
 
@@ -41,7 +42,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/overview_label_tv"
-        tools:text="When an attack on the Kingsman headquarters takes place and a new villain rises, Eggsy and Merlin are forced to work together with the American agency known as the Statesman to save the world." />
+        tools:text="When an attack on the Kingsman headquarters takes place and a new villain rises, Eggsy and Merlin are forced to work together with the American agency known as the Statesman to save the world."
+
+        />
 
     <TextView
         android:id="@+id/budget_label_tv"
@@ -49,6 +52,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:text="@string/budget_label"
+        android:visibility="invisible"
         app:layout_constraintEnd_toStartOf="@+id/revenue_label_tv"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -60,6 +64,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:text="@string/revenue_label"
+        android:visibility="invisible"
         app:layout_constraintEnd_toStartOf="@+id/popularity_label_tv"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/budget_label_tv"
@@ -71,6 +76,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:text="@string/popularity_label"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/revenue_label_tv"
@@ -113,9 +119,9 @@
         android:id="@+id/releaseDate_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/releaseDate_label_tv"
+        app:layout_constraintStart_toStartOf="@+id/releaseDate_label_tv"
         app:layout_constraintTop_toBottomOf="@+id/releaseDate_label_tv"
         tools:text="2017-12-12" />
 
@@ -123,9 +129,11 @@
         android:id="@+id/releaseDate_label_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="24dp"
         android:text="@string/release_date_label"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toStartOf="@+id/voteAverage_label_tv"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/budget_tv" />
 
@@ -133,36 +141,25 @@
         android:id="@+id/voteAverage_label_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
         android:layout_marginTop="24dp"
         android:text="@string/vote_average_label"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/releaseDate_tv" />
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/releaseDate_label_tv"
+        app:layout_constraintTop_toBottomOf="@+id/popularity_tv" />
 
     <TextView
         android:id="@+id/voteAverage_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/voteAverage_label_tv"
-        tools:text="TextView" />
-
-    <ProgressBar
-        android:id="@+id/loading_indicator_pb"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.25" />
+        app:layout_constraintEnd_toEndOf="@+id/voteAverage_label_tv"
+        app:layout_constraintStart_toStartOf="@+id/voteAverage_label_tv"
+        app:layout_constraintTop_toBottomOf="@+id/voteAverage_label_tv"
+        tools:text="TextView" />
 
 
 </android.support.constraint.ConstraintLayout>
