@@ -2,6 +2,7 @@ package com.glaserproject.flicks.Utils;
 
 import android.net.Uri;
 
+import com.glaserproject.flicks.BuildConfig;
 import com.glaserproject.flicks.Movie.Movie;
 
 import org.json.JSONArray;
@@ -43,7 +44,7 @@ public class MovieDbUtils {
     public static final String JSON_REVENUE_KEY = "revenue";
 
     //URL variables
-    private final static String MOVIE_DB_API_KEY = "put_your_api_here";  // MovieDB API Key removed for privacy issues. Get you
+    private final static String MOVIE_DB_API_KEY = BuildConfig.API_KEY;  // MovieDB API Key hidden in BuildConfig for security reasons
     private final static String MOVIE_DB_API_KEY_STRING = "api_key";
     private final static String MOVIE_DB_URL_BASE = "http://api.themoviedb.org/3/";
     private final static String MOVIE_DB_PATH_MOVIE = "movie";
