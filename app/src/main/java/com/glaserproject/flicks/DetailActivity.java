@@ -21,13 +21,30 @@ import com.squareup.picasso.Picasso;
 import java.net.URL;
 import java.text.NumberFormat;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class DetailActivity extends AppCompatActivity {
 
     int movieID;
-    TextView taglineTV, overviewTV, budgetTV, revenueTV, popularityTV, releaseDateTV, voteAverageTV;
-    TextView overviewLabelTV, budgetLabelTV, revenueLabelTV, popularityLabelTV, releaseDateLabelTV, voteAverageLabelTV;
+    //Bind Views with ButterKnife
+    @BindView(R.id.tagline_tv) TextView taglineTV;
+    @BindView(R.id.overview_tv) TextView overviewTV;
+    @BindView(R.id.overview_label_tv) TextView overviewLabelTV;
+    @BindView(R.id.budget_tv) TextView budgetTV;
+    @BindView(R.id.budget_label_tv) TextView budgetLabelTV;
+    @BindView(R.id.revenue_tv) TextView revenueTV;
+    @BindView(R.id.revenue_label_tv) TextView revenueLabelTV;
+    @BindView(R.id.popularity_tv) TextView popularityTV;
+    @BindView(R.id.popularity_label_tv) TextView popularityLabelTV;
+    @BindView(R.id.releaseDate_tv) TextView releaseDateTV;
+    @BindView(R.id.releaseDate_label_tv) TextView releaseDateLabelTV;
+    @BindView(R.id.voteAverage_tv) TextView voteAverageTV;
+    @BindView(R.id.voteAverage_label_tv) TextView voteAverageLabelTV;
+    @BindView(R.id.loading_indicator_pb) ProgressBar loadingIndicatorPB;
+    
     String releaseDate;
-    ProgressBar loadingIndicatorPB;
+
 
 
     @Override
@@ -39,6 +56,9 @@ public class DetailActivity extends AppCompatActivity {
         setSupportActionBar(myToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        //init ButterKnife
+        ButterKnife.bind(this);
 
         //get intent that lead to this Activity
         Intent intent = getIntent();
@@ -59,22 +79,6 @@ public class DetailActivity extends AppCompatActivity {
         //Load Image to Main Picture
         ImageView imageView = findViewById(R.id.imageView);
         Picasso.with(this).load(ConstantsClass.URL_PICTURE_BASE_W500 + backdropPath).into(imageView);
-
-        //initialize UI
-        taglineTV = findViewById(R.id.tagline_tv);
-        overviewTV = findViewById(R.id.overview_tv);
-        budgetTV = findViewById(R.id.budget_tv);
-        revenueTV = findViewById(R.id.revenue_tv);
-        popularityTV = findViewById(R.id.popularity_tv);
-        releaseDateTV = findViewById(R.id.releaseDate_tv);
-        voteAverageTV = findViewById(R.id.voteAverage_tv);
-        loadingIndicatorPB = findViewById(R.id.loading_indicator_pb);
-        overviewLabelTV = findViewById(R.id.overview_label_tv);
-        budgetLabelTV = findViewById(R.id.budget_label_tv);
-        revenueLabelTV = findViewById(R.id.revenue_label_tv);
-        popularityLabelTV = findViewById(R.id.popularity_label_tv);
-        releaseDateLabelTV = findViewById(R.id.releaseDate_label_tv);
-        voteAverageLabelTV = findViewById(R.id.voteAverage_label_tv);
 
 
         if (isNetworkAvailable(this)) {
