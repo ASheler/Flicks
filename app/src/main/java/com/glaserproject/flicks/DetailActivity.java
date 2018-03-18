@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.glaserproject.flicks.Movie.Movie;
 import com.glaserproject.flicks.Utils.ConstantsClass;
+import com.glaserproject.flicks.Utils.LoadFetchJSONmovieDetail;
 import com.glaserproject.flicks.Utils.MovieDbUtils;
 import com.squareup.picasso.Picasso;
 
@@ -77,7 +78,9 @@ public class DetailActivity extends AppCompatActivity {
 
 
         if (isNetworkAvailable(this)) {
-            new loadDataFromJSON().execute();
+            //connected - fetch data
+            new LoadFetchJSONmovieDetail(movieID, new LoadFetchJSONCompleteListener()).execute();
+
         } else {
             //Set no connection message as Tagline below image
             taglineTV.setVisibility(View.VISIBLE);
@@ -125,37 +128,19 @@ public class DetailActivity extends AppCompatActivity {
         return connectivityManager.getActiveNetworkInfo() != null && connectivityManager.getActiveNetworkInfo().isConnected();
     }
 
-    public class loadDataFromJSON extends AsyncTask<Movie, Void, Movie> {
+
+
+    //listener for JSON fetcher class
+    public class LoadFetchJSONCompleteListener implements LoadFetchJSONmovieDetail.AsyncTaskCompleteListener<Movie>{
 
         @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            //Show loading indicator
+        public void onTaskBegin() {
+            //show loading indicator
             loadingIndicatorPB.setVisibility(View.VISIBLE);
         }
 
         @Override
-        protected Movie doInBackground(Movie... movies) {
-            //build URL for JSON parsing
-            URL weatherRequestUrl = MovieDbUtils.buildMovieUrl(movieID);
-
-            try {
-                //get JSON from URL
-                String jsonWeatherResponse = MovieDbUtils.getJSONFromUrl(weatherRequestUrl);
-                //parse data from JSON
-                Movie movie = MovieDbUtils.parseMovieDetailJSON(jsonWeatherResponse);
-
-                return movie;
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                return null;
-            }
-        }
-
-        @Override
-        protected void onPostExecute(Movie movie) {
-            super.onPostExecute(movie);
+        public void onTaskComplete(Movie movie) {
             //set Loading Icon INVISIBLE
             loadingIndicatorPB.setVisibility(View.INVISIBLE);
             //update UI
