@@ -1,12 +1,15 @@
 package com.glaserproject.flicks.Movie;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.List;
 
 /**
  * Movie Object
  */
 
-public class Movie {
+public class Movie implements Parcelable{
 
     private int id;
     private int voteCount;
@@ -125,4 +128,46 @@ public class Movie {
     public int getBudget() {
         return budget;
     }
+
+
+
+
+    //make parcelable for passing through activity
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeString(backdropPath);
+        dest.writeString(movieTitle);
+        dest.writeString(releaseDate);
+    }
+
+    //Parcel IN
+    private Movie (Parcel in){
+        id = in.readInt();
+        backdropPath = in.readString();
+        movieTitle = in.readString();
+        releaseDate = in.readString();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+
+    public static final Parcelable.Creator<Movie> CREATOR =
+            new Parcelable.Creator<Movie>(){
+
+                @Override
+                public Movie createFromParcel(Parcel source) {
+                    //through parc. IN - create new Movie object
+                    return new Movie(source);
+                }
+
+                @Override
+                public Movie[] newArray(int size) {
+                    //get size
+                    return new Movie[size];
+                }
+            };
 }

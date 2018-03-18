@@ -42,7 +42,7 @@ public class DetailActivity extends AppCompatActivity {
     @BindView(R.id.voteAverage_tv) TextView voteAverageTV;
     @BindView(R.id.voteAverage_label_tv) TextView voteAverageLabelTV;
     @BindView(R.id.loading_indicator_pb) ProgressBar loadingIndicatorPB;
-    
+
     String releaseDate;
 
 
@@ -65,16 +65,27 @@ public class DetailActivity extends AppCompatActivity {
         if (intent == null) {
             finish();
         }
-        //get MovieID and Backdrop from intent
-        movieID = intent.getExtras().getInt(ConstantsClass.MOVIE_ID_INTENT_EXTRA_KEY, 0);
-        String backdropPath = intent.getExtras().getString(ConstantsClass.BACKDROP_PATH_INTENT_EXTRA_KEY);
+
+        //get Movie object from Intent
+        Movie movie = getIntent().getParcelableExtra(ConstantsClass.SELECTED_MOVIE_EXTRA_KEY);
+
+        //get MovieID and Backdrop
+        movieID = movie.getId();
+        String backdropPath = movie.getBackdropPath();
 
         //set Title
-        String movieTitle = intent.getExtras().getString(ConstantsClass.TITLE_INTENT_EXTRA_KEY);
+        String movieTitle = movie.getMovieTitle();
         getSupportActionBar().setTitle(movieTitle);
 
         //get Release Date
-        releaseDate = intent.getExtras().getString(ConstantsClass.RELEASE_DATE_INTENT_EXTRA_KEY, "NOT FOUND");
+        releaseDate = movie.getReleaseDate();
+
+
+
+
+
+
+
 
         //Load Image to Main Picture
         ImageView imageView = findViewById(R.id.imageView);

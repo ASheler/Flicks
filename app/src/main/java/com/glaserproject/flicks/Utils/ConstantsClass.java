@@ -5,10 +5,9 @@ package com.glaserproject.flicks.Utils;
  */
 
 public class ConstantsClass {
-    public static String MOVIE_ID_INTENT_EXTRA_KEY = "movie_id";
-    public static String BACKDROP_PATH_INTENT_EXTRA_KEY = "movie_backdrop_path";
-    public static String TITLE_INTENT_EXTRA_KEY = "movie_title";
-    public static String RELEASE_DATE_INTENT_EXTRA_KEY = "release_date";
+    //EXTRA for Intents
+    public static String SELECTED_MOVIE_EXTRA_KEY = "selected_movie";
+    //multiuse urls
     public static String URL_PICTURE_BASE_W500 = "http://image.tmdb.org/t/p/w500/";
 
 }

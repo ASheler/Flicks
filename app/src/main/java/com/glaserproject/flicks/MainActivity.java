@@ -85,10 +85,8 @@ public class MainActivity extends AppCompatActivity implements
     public void onClick(Movie movie) {
         //onClick leads to Detail Activity
         Intent intent = new Intent(this, DetailActivity.class);
-        intent.putExtra(ConstantsClass.MOVIE_ID_INTENT_EXTRA_KEY, movie.getId());
-        intent.putExtra(ConstantsClass.BACKDROP_PATH_INTENT_EXTRA_KEY, movie.getBackdropPath());
-        intent.putExtra(ConstantsClass.TITLE_INTENT_EXTRA_KEY, movie.getMovieTitle());
-        intent.putExtra(ConstantsClass.RELEASE_DATE_INTENT_EXTRA_KEY, movie.getReleaseDate());
+
+        intent.putExtra(ConstantsClass.SELECTED_MOVIE_EXTRA_KEY, movie);
 
         startActivity(intent);
     }
