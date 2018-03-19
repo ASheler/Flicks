@@ -50,6 +50,11 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
     @BindView(R.id.loading_indicator_pb) ProgressBar loadingIndicatorPB;
     @BindView(R.id.trailers_rv) RecyclerView trailersRV;
     @BindView(R.id.reviews_rv) RecyclerView reviewsRV;
+    @BindView(R.id.line) View lineView;
+    @BindView(R.id.line2) View line2View;
+    @BindView(R.id.trailers_label_tv) TextView trailersLabelTV;
+    @BindView(R.id.reviews_label_tv) TextView reviewsLabelTV;
+
 
     String releaseDate;
     TrailersAdapter mTrailersAdapter;
@@ -171,6 +176,10 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
         popularityLabelTV.setVisibility(View.VISIBLE);
         releaseDateLabelTV.setVisibility(View.VISIBLE);
         voteAverageLabelTV.setVisibility(View.VISIBLE);
+        lineView.setVisibility(View.VISIBLE);
+        line2View.setVisibility(View.VISIBLE);
+        trailersLabelTV.setVisibility(View.VISIBLE);
+        reviewsLabelTV.setVisibility(View.VISIBLE);
 
     }
 
@@ -183,7 +192,7 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
     }
 
     @Override
-    public void onClick(String videoKey) {
+    public void onTrailerClick(String videoKey) {
 
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(ConstantsClass.URL_YOUTUBUE_VIDEO_BASE).buildUpon()
                 .appendQueryParameter(ConstantsClass.URL_YOUTUBE_VIEW_KEY_STRING, videoKey)
