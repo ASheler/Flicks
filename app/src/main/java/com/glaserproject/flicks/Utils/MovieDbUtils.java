@@ -3,7 +3,9 @@ package com.glaserproject.flicks.Utils;
 import android.net.Uri;
 
 import com.glaserproject.flicks.BuildConfig;
-import com.glaserproject.flicks.Movie.Movie;
+import com.glaserproject.flicks.MyObjects.Movie;
+import com.glaserproject.flicks.MyObjects.Review;
+import com.glaserproject.flicks.MyObjects.Trailer;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -42,6 +44,11 @@ public class MovieDbUtils {
     public static final String JSON_BUDGET_KEY = "budget";
     public static final String JSON_TAGLINE_KEY = "tagline";
     public static final String JSON_REVENUE_KEY = "revenue";
+    public static final String JSON_KEY_KEY = "key";
+    public static final String JSON_NAME_KEY = "name";
+    public static final String JSON_SITE_KEY = "site";
+    public static final String JSON_AUTHOR_KEY = "author";
+    public static final String JSON_CONTENT_KEY = "content";
 
     //URL variables
     private final static String MOVIE_DB_API_KEY = BuildConfig.API_KEY;  // MovieDB API Key hidden in BuildConfig for security reasons
@@ -52,6 +59,9 @@ public class MovieDbUtils {
     private final static String MOVIE_DB_PATH_TOP_RATED = "top_rated";
     private final static String MOVIE_DB_PATH_NOW_PLAYING = "now_playing";
     private final static String MOVIE_DB_PATH_UPCOMING = "upcoming";
+    private final static String MOVIE_DB_PATH_VIDEOS = "videos";
+    private final static String MOVIE_DB_PATH_REVIEWS = "reviews";
+
 
     public static URL buildUrl(int streamSelection) {
         String currentEndPoint;
@@ -109,6 +119,48 @@ public class MovieDbUtils {
         return url;
     }
 
+
+    //build URL for Movie Trailers
+    public static URL buildTrailersUrl(int movieID) {
+
+        Uri builtUri = Uri.parse(MOVIE_DB_URL_BASE).buildUpon()
+                .appendPath(MOVIE_DB_PATH_MOVIE)
+                .appendPath(Integer.toString(movieID))
+                .appendPath(MOVIE_DB_PATH_VIDEOS)
+                .appendQueryParameter(MOVIE_DB_API_KEY_STRING, MOVIE_DB_API_KEY)
+                .build();
+        URL url = null;
+        try {
+            url = new URL(builtUri.toString());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        return url;
+    }
+
+
+    //build URL for Movie Reviews
+    public static URL buildReviewsUrl(int movieID) {
+
+        Uri builtUri = Uri.parse(MOVIE_DB_URL_BASE).buildUpon()
+                .appendPath(MOVIE_DB_PATH_MOVIE)
+                .appendPath(Integer.toString(movieID))
+                .appendPath(MOVIE_DB_PATH_REVIEWS)
+                .appendQueryParameter(MOVIE_DB_API_KEY_STRING, MOVIE_DB_API_KEY)
+                .build();
+        URL url = null;
+        try {
+            url = new URL(builtUri.toString());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        return url;
+    }
+
+
+
     //get stream from URL
     public static String getJSONFromUrl(URL url) throws IOException {
 
@@ -156,6 +208,66 @@ public class MovieDbUtils {
 
         return movie;
     }
+
+    //Get JSON Movie Trailer into Simple Strings
+    public static Trailer[] parseTrailersJSON(String json) throws JSONException {
+
+        String key;
+        String name;
+        String site;
+
+
+        JSONObject jsonRoot = new JSONObject(json);
+        JSONArray resultsRoot = jsonRoot.optJSONArray(JSON_RESULTS_KEY);
+
+        //initialize Trailer[] variable
+        Trailer[] trailers = new Trailer[resultsRoot.length()];
+
+
+        for (int i = 0; i < resultsRoot.length(); i++) {
+            Trailer tempTrailer;
+            JSONObject results = resultsRoot.getJSONObject(i);
+
+            key = results.optString(JSON_KEY_KEY, "NOT FOUND");
+            name = results.optString(JSON_NAME_KEY, "NOT FOUND");
+            site = results.optString(JSON_SITE_KEY, "NOT FOUND");
+            tempTrailer = new Trailer(key, name, site);
+            trailers[i] = tempTrailer;
+        }
+
+        return trailers;
+    }
+
+
+    //Get JSON Movie Reviews into Simple Strings
+    public static Review[] parseReviewsJSON(String json) throws JSONException {
+
+        String name;
+        String body;
+
+
+        JSONObject jsonRoot = new JSONObject(json);
+        JSONArray resultsRoot = jsonRoot.optJSONArray(JSON_RESULTS_KEY);
+
+        //initialize Review[] variable
+        Review[] reviews = new Review[resultsRoot.length()];
+
+
+        for (int i = 0; i < resultsRoot.length(); i++) {
+            Review tempReview;
+            JSONObject results = resultsRoot.getJSONObject(i);
+
+            name = results.optString(JSON_AUTHOR_KEY, "NOT FOUND");
+            body = results.optString(JSON_CONTENT_KEY, "NOT FOUND");
+            tempReview = new Review(name, body);
+            reviews[i] = tempReview;
+        }
+
+        return reviews;
+    }
+
+
+
 
 
     //Get JSON All Movies into Simple Strings

@@ -1,9 +1,8 @@
 package com.glaserproject.flicks.Utils;
 
-import android.content.Context;
 import android.os.AsyncTask;
 
-import com.glaserproject.flicks.Movie.Movie;
+import com.glaserproject.flicks.MyObjects.Movie;
 
 import java.net.URL;
 

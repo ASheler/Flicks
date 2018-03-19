@@ -16,4 +16,6 @@
     <string name="no_connection_message">NO CONNECTION AVAILABLE… \n Please check your connection and try again.</string>
     <string name="reload">Reload</string>
     <string name="no_connection_toast">No connection Available. Try again later.</string>
+    <string name="trailers_label_text">Trailers</string>
+    <string name="reviews_label_text">Reviews</string>
 </resources>

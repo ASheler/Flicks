@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.glaserproject.flicks.Movie.Movie;
+import com.glaserproject.flicks.MyObjects.Movie;
 import com.glaserproject.flicks.R;
 import com.glaserproject.flicks.Utils.ConstantsClass;
 import com.squareup.picasso.Picasso;
@@ -79,7 +79,7 @@ public class TileAdapter extends RecyclerView.Adapter<TileAdapter.TileViewHolder
 
         //Bind data - set content
         void bind(int index) {
-            //text1.setLetterSpacing(0.2f);
+
             Picasso.with(itemView.getContext())
                     .load(ConstantsClass.URL_PICTURE_BASE_W500 + mMovies[index].getPosterPath())
                     .into(backgroundImage);

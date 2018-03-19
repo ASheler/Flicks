@@ -18,7 +18,7 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.glaserproject.flicks.Movie.Movie;
+import com.glaserproject.flicks.MyObjects.Movie;
 import com.glaserproject.flicks.Utils.ConstantsClass;
 import com.glaserproject.flicks.Utils.LoadFetchJSONmovies;
 import com.glaserproject.flicks.RvAdapter.TileAdapter;

@@ -2,7 +2,9 @@ package com.glaserproject.flicks.Utils;
 
 import android.os.AsyncTask;
 
-import com.glaserproject.flicks.Movie.Movie;
+import com.glaserproject.flicks.MyObjects.Movie;
+import com.glaserproject.flicks.MyObjects.Review;
+import com.glaserproject.flicks.MyObjects.Trailer;
 
 import java.net.URL;
 
@@ -40,13 +42,24 @@ public class LoadFetchJSONmovieDetail extends AsyncTask<Movie, Void, Movie> {
 
     @Override
     protected Movie doInBackground(Movie... movies) {
-        URL jsonRequestUrl = MovieDbUtils.buildMovieUrl(movieID);
+        URL jsonMovieDetailUrl = MovieDbUtils.buildMovieUrl(movieID);
+        URL jsonTrailersUrl = MovieDbUtils.buildTrailersUrl(movieID);
+        URL jsonReviewsUrl = MovieDbUtils.buildReviewsUrl(movieID);
 
         try {
             //get JSON from URL
-            String jsonResponse = MovieDbUtils.getJSONFromUrl(jsonRequestUrl);
+            String jsonDetailsResponse = MovieDbUtils.getJSONFromUrl(jsonMovieDetailUrl);
+            String jsonTrailersResponse = MovieDbUtils.getJSONFromUrl(jsonTrailersUrl);
+            String jsonReviewsResponse = MovieDbUtils.getJSONFromUrl(jsonReviewsUrl);
             //parse data from JSON
-            Movie movie = MovieDbUtils.parseMovieDetailJSON(jsonResponse);
+            Movie movie = MovieDbUtils.parseMovieDetailJSON(jsonDetailsResponse);
+
+            Trailer[] trailer = MovieDbUtils.parseTrailersJSON(jsonTrailersResponse);
+            Review[] review = MovieDbUtils.parseReviewsJSON(jsonReviewsResponse);
+
+            movie.putTrailer(trailer);
+            movie.putReview(review);
+
 
             return movie;
 

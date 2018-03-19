@@ -3,28 +3,34 @@ package com.glaserproject.flicks;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
-import android.os.AsyncTask;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.glaserproject.flicks.Movie.Movie;
+import com.glaserproject.flicks.MyObjects.Movie;
+import com.glaserproject.flicks.MyObjects.Review;
+import com.glaserproject.flicks.MyObjects.Trailer;
+import com.glaserproject.flicks.RvAdapter.ReviewsAdapeter;
+import com.glaserproject.flicks.RvAdapter.TrailersAdapter;
 import com.glaserproject.flicks.Utils.ConstantsClass;
 import com.glaserproject.flicks.Utils.LoadFetchJSONmovieDetail;
 import com.glaserproject.flicks.Utils.MovieDbUtils;
 import com.squareup.picasso.Picasso;
 
-import java.net.URL;
 import java.text.NumberFormat;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class DetailActivity extends AppCompatActivity {
+public class DetailActivity extends AppCompatActivity implements TrailersAdapter.TrailersAdapterOnClickHandler{
 
     int movieID;
     //Bind Views with ButterKnife
@@ -42,8 +48,12 @@ public class DetailActivity extends AppCompatActivity {
     @BindView(R.id.voteAverage_tv) TextView voteAverageTV;
     @BindView(R.id.voteAverage_label_tv) TextView voteAverageLabelTV;
     @BindView(R.id.loading_indicator_pb) ProgressBar loadingIndicatorPB;
+    @BindView(R.id.trailers_rv) RecyclerView trailersRV;
+    @BindView(R.id.reviews_rv) RecyclerView reviewsRV;
 
     String releaseDate;
+    TrailersAdapter mTrailersAdapter;
+    ReviewsAdapeter mReviewsAdapter;
 
 
 
@@ -82,11 +92,6 @@ public class DetailActivity extends AppCompatActivity {
 
 
 
-
-
-
-
-
         //Load Image to Main Picture
         ImageView imageView = findViewById(R.id.imageView);
         Picasso.with(this).load(ConstantsClass.URL_PICTURE_BASE_W500 + backdropPath).into(imageView);
@@ -101,6 +106,34 @@ public class DetailActivity extends AppCompatActivity {
             taglineTV.setVisibility(View.VISIBLE);
             taglineTV.setText(R.string.no_connection_message);
         }
+
+
+        //setup RecyclerView & Layout Manager for Trailers
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+
+        trailersRV.setLayoutManager(layoutManager);
+        trailersRV.setHasFixedSize(true);
+
+        //Initialize empty TileAdapter for better performance
+        mTrailersAdapter = new TrailersAdapter(this);
+        //set Adapter for RecyclerView
+        trailersRV.setAdapter(mTrailersAdapter);
+
+
+        ///setup RV & LM for Reviews
+        LinearLayoutManager reviewsLayoutManager = new LinearLayoutManager(this);
+
+        reviewsRV.setLayoutManager(reviewsLayoutManager);
+        reviewsRV.setHasFixedSize(true);
+
+        //Initialize empty TileAdapter for better performance
+        mReviewsAdapter = new ReviewsAdapeter();
+        //set Adapter for RecyclerView
+        reviewsRV.setAdapter(mReviewsAdapter);
+
+
+
+
 
     }
 
@@ -120,6 +153,12 @@ public class DetailActivity extends AppCompatActivity {
         popularityTV.setText(movie.getPopularity());
         releaseDateTV.setText(releaseDate);
         voteAverageTV.setText(movie.getVoteAverage());
+
+        //set trailers
+        mTrailersAdapter.setTrailersData(movie.getTrailers());
+
+        //set reviews
+        mReviewsAdapter.setReviewsData(movie.getReviews());
 
 
     }
@@ -143,6 +182,14 @@ public class DetailActivity extends AppCompatActivity {
         return connectivityManager.getActiveNetworkInfo() != null && connectivityManager.getActiveNetworkInfo().isConnected();
     }
 
+    @Override
+    public void onClick(String videoKey) {
+
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(ConstantsClass.URL_YOUTUBUE_VIDEO_BASE).buildUpon()
+                .appendQueryParameter(ConstantsClass.URL_YOUTUBE_VIEW_KEY_STRING, videoKey)
+                .build());
+        startActivity(intent);
+    }
 
 
     //listener for JSON fetcher class

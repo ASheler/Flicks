@@ -1,4 +1,4 @@
-package com.glaserproject.flicks.Movie;
+package com.glaserproject.flicks.MyObjects;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -27,6 +27,8 @@ public class Movie implements Parcelable{
     private String tagline;
     private int revenue;
     private int budget;
+    private Trailer[] trailers;
+    private Review[] reviews;
 
 
     public Movie() {
@@ -127,6 +129,22 @@ public class Movie implements Parcelable{
 
     public int getBudget() {
         return budget;
+    }
+
+    public void putTrailer (Trailer[] trailer){
+        this.trailers = trailer;
+    }
+
+    public Trailer[] getTrailers () {
+        return trailers;
+    }
+
+    public void putReview (Review[] reviews){
+        this.reviews = reviews;
+    }
+
+    public Review[] getReviews (){
+        return reviews;
     }
 
 
