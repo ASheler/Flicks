@@ -1,5 +1,6 @@
 package com.glaserproject.flicks;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -19,6 +20,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.glaserproject.flicks.MyObjects.Movie;
+import com.glaserproject.flicks.Utils.BaseViewModel;
 import com.glaserproject.flicks.Utils.ConstantsClass;
 import com.glaserproject.flicks.Utils.LoadFetchJSONmovies;
 import com.glaserproject.flicks.RvAdapter.TileAdapter;
@@ -33,6 +35,10 @@ public class MainActivity extends AppCompatActivity implements
     TileAdapter mTileAdapter;
     RecyclerView mMoviesRV;
     int currentSelection;
+
+    private BaseViewModel viewModel;
+
+    Movie[] movies;
 
 
     @Override
@@ -49,8 +55,16 @@ public class MainActivity extends AppCompatActivity implements
         mMoviesRV = findViewById(R.id.movies_rv);
         reloadButton = findViewById(R.id.reloadButton);
 
-        //initialize selection
-        currentSelection = 0;
+        //initialize viewModel
+        viewModel = ViewModelProviders.of(this).get(BaseViewModel.class);
+
+        //check and setup viewModel
+        if (viewModel.isFilled()){
+            currentSelection = viewModel.getCurrentSelection();
+            movies = viewModel.getMovie();
+        } else {
+            currentSelection = 0;
+        }
 
         //setup RecyclerView & Layout Manager
         GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
@@ -117,26 +131,38 @@ public class MainActivity extends AppCompatActivity implements
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
 
+        spinner.setSelection(currentSelection);
+
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 currentSelection = position;
-                //If connection available - load!
-                if (isNetworkAvailable(MainActivity.this)) {
-                    //hide Reload Button
-                    reloadButton.setVisibility(View.GONE);
-                    //connected - load data
-                    new LoadFetchJSONmovies(position, new LoadFetchJSONCompleteListener()).execute();
 
+                //check if we have data loaded already
+                //if we have data - load it
+                if (viewModel.isFilled() && position == viewModel.getCurrentSelection()){
+                    updateUI(viewModel.getMovie());
+
+                    //if not - fetch it
                 } else {
-                    //hide Reload Button
-                    reloadButton.setVisibility(View.VISIBLE);
-                    //set error message on no connection
-                    Toast.makeText(MainActivity.this, R.string.no_connection_toast, Toast.LENGTH_SHORT).show();
-                }
+                    //If connection available - load!
+                    if (isNetworkAvailable(MainActivity.this)) {
+                        //hide Reload Button
+                        reloadButton.setVisibility(View.GONE);
+                        //connected - load data
+                        new LoadFetchJSONmovies(position, new LoadFetchJSONCompleteListener()).execute();
+                    } else {
+                        //hide Reload Button
+                        reloadButton.setVisibility(View.VISIBLE);
+                        //set error message on no connection
+                        Toast.makeText(MainActivity.this, R.string.no_connection_toast, Toast.LENGTH_SHORT).show();
+                        //clear ui and set null data to rv
+                        mTileAdapter.setNullData();
 
-                //new loadJSON().execute();
+
+                    }
+                }
 
             }
 
@@ -155,17 +181,26 @@ public class MainActivity extends AppCompatActivity implements
 
         @Override
         public void onTaskBegin() {
+            //show loading button
             loadingIndicatorPB.setVisibility(View.VISIBLE);
         }
 
         @Override
         public void onTaskComplete(Movie[] movies) {
-            //set Loading Icon INVISIBLE
+
+            //initialize viewModel with current movies and selection
+            viewModel.init(movies, currentSelection);
+
+            //hide loading button
             loadingIndicatorPB.setVisibility(View.INVISIBLE);
             //Update UI
             updateUI(movies);
+
+
         }
     }
+
+
 
 
 }

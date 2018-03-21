@@ -23,6 +23,7 @@ public class TileAdapter extends RecyclerView.Adapter<TileAdapter.TileViewHolder
     private final TileAdapterOnClickHandler mClickHandler;
     private Movie[] mMovies;
 
+
     //initialize TileAdapter w/ click handler
     public TileAdapter(TileAdapterOnClickHandler onClickHandler) {
         mClickHandler = onClickHandler;
@@ -49,6 +50,14 @@ public class TileAdapter extends RecyclerView.Adapter<TileAdapter.TileViewHolder
         }
         return mMovies.length;
     }
+
+    //set null data
+    public void setNullData(){
+        mMovies = null;
+        notifyDataSetChanged();
+    }
+
+
 
     //set whole new set of data
     public void setMovieData(Movie[] movies) {

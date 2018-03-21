@@ -1,5 +1,6 @@
 package com.glaserproject.flicks;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -13,16 +14,13 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.glaserproject.flicks.MyObjects.Movie;
-import com.glaserproject.flicks.MyObjects.Review;
-import com.glaserproject.flicks.MyObjects.Trailer;
 import com.glaserproject.flicks.RvAdapter.ReviewsAdapeter;
 import com.glaserproject.flicks.RvAdapter.TrailersAdapter;
+import com.glaserproject.flicks.Utils.BaseViewModel;
 import com.glaserproject.flicks.Utils.ConstantsClass;
 import com.glaserproject.flicks.Utils.LoadFetchJSONmovieDetail;
-import com.glaserproject.flicks.Utils.MovieDbUtils;
 import com.squareup.picasso.Picasso;
 
 import java.text.NumberFormat;
@@ -60,6 +58,9 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
     TrailersAdapter mTrailersAdapter;
     ReviewsAdapeter mReviewsAdapter;
 
+    private BaseViewModel viewModel;
+    Movie movie;
+
 
 
     @Override
@@ -81,8 +82,18 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
             finish();
         }
 
-        //get Movie object from Intent
-        Movie movie = getIntent().getParcelableExtra(ConstantsClass.SELECTED_MOVIE_EXTRA_KEY);
+        //init viewModel
+        viewModel = ViewModelProviders.of(this).get(BaseViewModel.class);
+
+        //check and setup viewModel
+        if (viewModel.getSingleMovie() != null){
+            movie = viewModel.getSingleMovie();
+        } else {
+            //get Movie object from Intent
+            movie = getIntent().getParcelableExtra(ConstantsClass.SELECTED_MOVIE_EXTRA_KEY);
+            viewModel.initSingleMovie(movie);
+        }
+
 
         //get MovieID and Backdrop
         movieID = movie.getId();
@@ -102,15 +113,6 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
         Picasso.with(this).load(ConstantsClass.URL_PICTURE_BASE_W500 + backdropPath).into(imageView);
 
 
-        if (isNetworkAvailable(this)) {
-            //connected - fetch data
-            new LoadFetchJSONmovieDetail(movieID, new LoadFetchJSONCompleteListener()).execute();
-
-        } else {
-            //Set no connection message as Tagline below image
-            taglineTV.setVisibility(View.VISIBLE);
-            taglineTV.setText(R.string.no_connection_message);
-        }
 
 
         //setup RecyclerView & Layout Manager for Trailers
@@ -137,6 +139,21 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
         reviewsRV.setAdapter(mReviewsAdapter);
 
 
+        //check if we have stored UI data
+        if (viewModel.isFilled()){
+            //if data -> show them
+            updateUI(viewModel.getMovieDetail());
+        } else {
+            if (isNetworkAvailable(this)) {
+                //connected - fetch data
+                new LoadFetchJSONmovieDetail(movieID, new LoadFetchJSONCompleteListener()).execute();
+
+            } else {
+                //Set no connection message as Tagline below image
+                taglineTV.setVisibility(View.VISIBLE);
+                taglineTV.setText(R.string.no_connection_message);
+            }
+        }
 
 
 
@@ -216,6 +233,8 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
             loadingIndicatorPB.setVisibility(View.INVISIBLE);
             //update UI
             updateUI(movie);
+            //init Movie Detail viewModel
+            viewModel.initMovieDetail(movie);
         }
     }
 
