@@ -1,5 +1,6 @@
 package com.glaserproject.flicks;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -15,13 +16,13 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.glaserproject.flicks.Favorites.FavoritesContract;
 import com.glaserproject.flicks.MyObjects.Movie;
 import com.glaserproject.flicks.RvAdapter.ReviewsAdapeter;
 import com.glaserproject.flicks.RvAdapter.TileAdapter;
 import com.glaserproject.flicks.RvAdapter.TrailersAdapter;
+import com.glaserproject.flicks.Utils.BaseViewModel;
 import com.glaserproject.flicks.Utils.ConstantsClass;
 import com.glaserproject.flicks.Utils.LoadFetchJSONmovieDetail;
 import com.squareup.picasso.Picasso;
@@ -52,6 +53,11 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
     @BindView(R.id.trailers_rv) RecyclerView trailersRV;
     @BindView(R.id.reviews_rv) RecyclerView reviewsRV;
     @BindView(R.id.favs_star_iv) ImageView favsStarIV;
+    @BindView(R.id.line) View lineView;
+    @BindView(R.id.line2) View line2View;
+    @BindView(R.id.trailers_label_tv) TextView trailersLabelTV;
+    @BindView(R.id.reviews_label_tv) TextView reviewsLabelTV;
+
 
     String releaseDate;
     TrailersAdapter mTrailersAdapter;
@@ -61,6 +67,9 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
     String backdropPath;
     String posterPath;
     boolean isInFavs;
+    private BaseViewModel viewModel;
+    Movie movie;
+
 
 
     @Override
@@ -82,8 +91,18 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
             finish();
         }
 
-        //get Movie object from Intent
-        Movie movie = getIntent().getParcelableExtra(ConstantsClass.SELECTED_MOVIE_EXTRA_KEY);
+        //init viewModel
+        viewModel = ViewModelProviders.of(this).get(BaseViewModel.class);
+
+        //check and setup viewModel
+        if (viewModel.getSingleMovie() != null){
+            movie = viewModel.getSingleMovie();
+        } else {
+            //get Movie object from Intent
+            movie = getIntent().getParcelableExtra(ConstantsClass.SELECTED_MOVIE_EXTRA_KEY);
+            viewModel.initSingleMovie(movie);
+        }
+
 
         //get MovieID and Backdrop
         movieID = movie.getId();
@@ -108,15 +127,6 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
         Picasso.with(this).load(ConstantsClass.URL_PICTURE_BASE_W500 + backdropPath).into(imageView);
 
 
-        if (isNetworkAvailable(this)) {
-            //connected - fetch data
-            new LoadFetchJSONmovieDetail(movieID, new LoadFetchJSONCompleteListener()).execute();
-
-        } else {
-            //Set no connection message as Tagline below image
-            taglineTV.setVisibility(View.VISIBLE);
-            taglineTV.setText(R.string.no_connection_message);
-        }
 
 
         //setup RecyclerView & Layout Manager for Trailers
@@ -143,6 +153,21 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
         reviewsRV.setAdapter(mReviewsAdapter);
 
 
+        //check if we have stored UI data
+        if (viewModel.isFilled()){
+            //if data -> show them
+            updateUI(viewModel.getMovieDetail());
+        } else {
+            if (isNetworkAvailable(this)) {
+                //connected - fetch data
+                new LoadFetchJSONmovieDetail(movieID, new LoadFetchJSONCompleteListener()).execute();
+
+            } else {
+                //Set no connection message as Tagline below image
+                taglineTV.setVisibility(View.VISIBLE);
+                taglineTV.setText(R.string.no_connection_message);
+            }
+        }
 
         favsStarIV.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -195,6 +220,10 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
         popularityLabelTV.setVisibility(View.VISIBLE);
         releaseDateLabelTV.setVisibility(View.VISIBLE);
         voteAverageLabelTV.setVisibility(View.VISIBLE);
+        lineView.setVisibility(View.VISIBLE);
+        line2View.setVisibility(View.VISIBLE);
+        trailersLabelTV.setVisibility(View.VISIBLE);
+        reviewsLabelTV.setVisibility(View.VISIBLE);
 
     }
 
@@ -207,7 +236,7 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
     }
 
     @Override
-    public void onClick(String videoKey) {
+    public void onTrailerClick(String videoKey) {
 
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(ConstantsClass.URL_YOUTUBUE_VIDEO_BASE).buildUpon()
                 .appendQueryParameter(ConstantsClass.URL_YOUTUBE_VIEW_KEY_STRING, videoKey)
@@ -231,6 +260,8 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
             loadingIndicatorPB.setVisibility(View.INVISIBLE);
             //update UI
             updateUI(movie);
+            //init Movie Detail viewModel
+            viewModel.initMovieDetail(movie);
 
         }
     }

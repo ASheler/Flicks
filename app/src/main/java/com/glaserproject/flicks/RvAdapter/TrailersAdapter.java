@@ -27,7 +27,7 @@ public class TrailersAdapter extends RecyclerView.Adapter<TrailersAdapter.Traile
 
     //click Interface
     public interface TrailersAdapterOnClickHandler {
-        void onClick(String videoKey);
+        void onTrailerClick(String videoKey);
     }
 
 
@@ -80,7 +80,7 @@ public class TrailersAdapter extends RecyclerView.Adapter<TrailersAdapter.Traile
         @Override
         public void onClick(View v) {
             int adapterPosition = getAdapterPosition();
-            mClickHandler.onClick(mTrailers[adapterPosition].getKey());
+            mClickHandler.onTrailerClick(mTrailers[adapterPosition].getKey());
         }
     }
 }
