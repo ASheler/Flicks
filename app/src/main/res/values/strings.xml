@@ -20,4 +20,6 @@
     <string name="reviews_label_text">Reviews</string>
     <string name="added_to_favs_text">Added to Favorites</string>
     <string name="removed_from_favs_text">Removed from Favorites</string>
+    <string name="trailer_share_dialog_title">Share the Trailer</string>
+    <string name="no_favs_saved_text">No Favorite movies saved yet. \nYou can add movie to your favorites by clicking star icon on Movie detail screen.</string>
 </resources>

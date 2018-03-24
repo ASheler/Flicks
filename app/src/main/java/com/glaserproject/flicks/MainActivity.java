@@ -1,5 +1,6 @@
 package com.glaserproject.flicks;
 
+import android.app.Activity;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
@@ -17,6 +18,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.glaserproject.flicks.MyObjects.Movie;
@@ -32,6 +34,7 @@ public class MainActivity extends AppCompatActivity implements
     ProgressBar loadingIndicatorPB;
 
     Button reloadButton;
+    TextView noFavsSavedTV;
 
     TileAdapter mTileAdapter;
     RecyclerView mMoviesRV;
@@ -52,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements
         loadingIndicatorPB = findViewById(R.id.loading_indicator_pb);
         mMoviesRV = findViewById(R.id.movies_rv);
         reloadButton = findViewById(R.id.reloadButton);
+        noFavsSavedTV = findViewById(R.id.no_favs_saved_TV);
 
         //initialize viewModel
         viewModel = ViewModelProviders.of(this).get(BaseViewModel.class);
@@ -100,11 +104,18 @@ public class MainActivity extends AppCompatActivity implements
         //send movie object
         intent.putExtra(ConstantsClass.SELECTED_MOVIE_EXTRA_KEY, movie);
         //start Detail Activity
-        startActivity(intent);
+        startActivityForResult(intent, 1);
     }
 
     //update UI with new data
     public void updateUI(Movie[] movies) {
+
+        if (movies.length == 0){
+            noFavsSavedTV.setVisibility(View.VISIBLE);
+        } else {
+            noFavsSavedTV.setVisibility(View.GONE);
+        }
+
         mTileAdapter.setMovieData(movies);
     }
 
@@ -177,13 +188,6 @@ public class MainActivity extends AppCompatActivity implements
         return true;
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (currentSelection == 4) {
-            //TODO: notify change in dataset
-        }
-    }
 
     //listener for JSON fetcher class
     public class LoadFetchJSONCompleteListener implements LoadFetchJSONmovies.AsyncTaskCompleteListener<Movie[]> {
@@ -220,10 +224,25 @@ public class MainActivity extends AppCompatActivity implements
 
         @Override
         public void onTaskComplete(Movie[] movies) {
+
+            //init viewModel with current selection and Movies
+            viewModel.init(movies, currentSelection);
+
             //hide loading button
             loadingIndicatorPB.setVisibility(View.INVISIBLE);
+
             //update UI with loaded Fav movies
             updateUI(movies);
+        }
+    }
+
+    //check if favorites changed -> if so, reload the list
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1){
+            if (resultCode == Activity.RESULT_OK && currentSelection == 4 && data.getBooleanExtra("hovno", false)) {
+                new LoadFetchDbFavs(getApplicationContext(), new LoadFetchDbFavsCompleteListener()).execute();
+            }
         }
     }
 }

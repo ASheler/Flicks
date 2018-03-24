@@ -7,10 +7,12 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.Uri;
+import android.support.v4.app.ShareCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
@@ -28,6 +30,7 @@ import com.glaserproject.flicks.Utils.ConstantsClass;
 import com.glaserproject.flicks.Utils.LoadFetchJSONmovieDetail;
 import com.squareup.picasso.Picasso;
 
+import java.net.URL;
 import java.text.NumberFormat;
 
 import butterknife.BindView;
@@ -70,6 +73,8 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
     boolean isInFavs;
     private BaseViewModel viewModel;
     Movie movie;
+
+    boolean favsChanged;
 
 
 
@@ -244,6 +249,23 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
         startActivity(intent);
     }
 
+    @Override
+    public void onTrailerLongClick(String videoName, String videoKey) {
+
+        Uri.Builder builder = new Uri.Builder();
+        builder.scheme("https")
+                .authority("youtu.be")
+                .appendPath(videoKey);
+        String myUrl = videoName + " - " + builder.build().toString();
+
+        ShareCompat.IntentBuilder
+                .from(this)
+                .setType("text/plain")
+                .setChooserTitle(R.string.trailer_share_dialog_title)
+                .setText(myUrl)
+                .startChooser();
+    }
+
 
     //listener for JSON fetcher class
     public class LoadFetchJSONCompleteListener implements LoadFetchJSONmovieDetail.AsyncTaskCompleteListener<Movie>{
@@ -276,6 +298,8 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
             //if not -> set gray star
             favsStarIV.setImageResource(R.drawable.ic_favs_star_grey);
         }
+
+
 
     }
 
@@ -344,8 +368,16 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
             }
         }
 
+        favsChanged = true;
+
     }
 
-
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent();
+        intent.putExtra("hovno", favsChanged);
+        setResult(RESULT_OK, intent);
+        super.onBackPressed();
+    }
 
 }

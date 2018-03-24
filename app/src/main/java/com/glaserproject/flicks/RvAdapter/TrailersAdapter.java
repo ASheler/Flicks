@@ -1,11 +1,9 @@
 package com.glaserproject.flicks.RvAdapter;
 
-import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.glaserproject.flicks.MyObjects.Trailer;
@@ -28,7 +26,9 @@ public class TrailersAdapter extends RecyclerView.Adapter<TrailersAdapter.Traile
     //click Interface
     public interface TrailersAdapterOnClickHandler {
         void onTrailerClick(String videoKey);
+        void onTrailerLongClick(String videoName, String videoKey);
     }
+
 
 
     @Override
@@ -59,7 +59,7 @@ public class TrailersAdapter extends RecyclerView.Adapter<TrailersAdapter.Traile
     }
 
 
-    public class TrailersViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class TrailersViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
         TextView trailerName;
         View lowerLine;
@@ -72,6 +72,7 @@ public class TrailersAdapter extends RecyclerView.Adapter<TrailersAdapter.Traile
             lowerLine = itemView.findViewById(R.id.trailer_separator);
 
             itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
         }
 
         //Bind data - set content
@@ -87,6 +88,13 @@ public class TrailersAdapter extends RecyclerView.Adapter<TrailersAdapter.Traile
         public void onClick(View v) {
             int adapterPosition = getAdapterPosition();
             mClickHandler.onTrailerClick(mTrailers[adapterPosition].getKey());
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            int adapterPosition = getAdapterPosition();
+            mClickHandler.onTrailerLongClick(mTrailers[adapterPosition].getName(), mTrailers[adapterPosition].getKey());
+            return true;
         }
     }
 }
