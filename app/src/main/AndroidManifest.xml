@@ -25,6 +25,10 @@
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.DetailActivity"
             />
+        <provider
+            android:authorities="com.glaserproject.flicks"
+            android:exported="false"
+            android:name="com.glaserproject.flicks.Favorites.FavoritesContentProvider" />
     </application>
 
 </manifest>

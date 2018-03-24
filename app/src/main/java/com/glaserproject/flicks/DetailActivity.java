@@ -1,7 +1,9 @@
 package com.glaserproject.flicks;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
@@ -15,14 +17,12 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.glaserproject.flicks.Favorites.FavoritesContract;
 import com.glaserproject.flicks.MyObjects.Movie;
-import com.glaserproject.flicks.MyObjects.Review;
-import com.glaserproject.flicks.MyObjects.Trailer;
 import com.glaserproject.flicks.RvAdapter.ReviewsAdapeter;
 import com.glaserproject.flicks.RvAdapter.TrailersAdapter;
 import com.glaserproject.flicks.Utils.ConstantsClass;
 import com.glaserproject.flicks.Utils.LoadFetchJSONmovieDetail;
-import com.glaserproject.flicks.Utils.MovieDbUtils;
 import com.squareup.picasso.Picasso;
 
 import java.text.NumberFormat;
@@ -50,11 +50,15 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
     @BindView(R.id.loading_indicator_pb) ProgressBar loadingIndicatorPB;
     @BindView(R.id.trailers_rv) RecyclerView trailersRV;
     @BindView(R.id.reviews_rv) RecyclerView reviewsRV;
+    @BindView(R.id.favs_star_iv) ImageView favsStarIV;
 
     String releaseDate;
     TrailersAdapter mTrailersAdapter;
     ReviewsAdapeter mReviewsAdapter;
 
+    String movieTitle;
+    String backdropPath;
+    boolean isInFavs;
 
 
     @Override
@@ -81,14 +85,18 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
 
         //get MovieID and Backdrop
         movieID = movie.getId();
-        String backdropPath = movie.getBackdropPath();
+        backdropPath = movie.getBackdropPath();
 
         //set Title
-        String movieTitle = movie.getMovieTitle();
+        movieTitle = movie.getMovieTitle();
         getSupportActionBar().setTitle(movieTitle);
 
         //get Release Date
         releaseDate = movie.getReleaseDate();
+
+
+
+        checkIfInFavs();
 
 
 
@@ -133,11 +141,24 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
 
 
 
+        favsStarIV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                favsStarClick();
+            }
+        });
+
+
 
 
     }
 
     public void updateUI(Movie movie) {
+
+
+        changeFavsStar();
+
+
         //first make UI elements visible
         showUIelements();
 
@@ -207,7 +228,64 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
             loadingIndicatorPB.setVisibility(View.INVISIBLE);
             //update UI
             updateUI(movie);
+
+
         }
     }
+
+    public void changeFavsStar(){
+        if (isInFavs){
+            favsStarIV.setImageResource(R.drawable.ic_favs_star_gold);
+        } else {
+            favsStarIV.setImageResource(R.drawable.ic_favs_star_grey);
+        }
+
+    }
+
+    public void checkIfInFavs(){
+        Cursor cursor = getContentResolver().query(FavoritesContract.FavoritesEntry.CONTENT_URI, null, FavoritesContract.FavoritesEntry.COLUMN_MOVIE_ID + "=?", new String[]{Integer.toString(movieID)}, null);
+        int lenght = cursor.getCount();
+        if (lenght > 0){
+            //in favs
+            isInFavs = true;
+        } else {
+            isInFavs = false;
+        }
+        changeFavsStar();
+    }
+
+
+
+
+    public void favsStarClick (){
+        if (isInFavs){
+            Uri uri = FavoritesContract.FavoritesEntry.CONTENT_URI;
+            uri = uri.buildUpon().appendPath(Integer.toString(movieID)).build();
+            getContentResolver().delete(uri, null, null);
+            Toast.makeText(this, "Removed from Favorites", Toast.LENGTH_SHORT).show();
+            isInFavs = false;
+            changeFavsStar();
+        } else {
+
+            ContentValues contentValues = new ContentValues();
+
+            contentValues.put(FavoritesContract.FavoritesEntry.COLUMN_MOVIE_ID, movieID);
+            contentValues.put(FavoritesContract.FavoritesEntry.COLUMN_MOVIE_TITLE, movieTitle);
+            contentValues.put(FavoritesContract.FavoritesEntry.COLUMN_POSTER_PATH, backdropPath);
+
+            Uri uri = getContentResolver().insert(FavoritesContract.FavoritesEntry.CONTENT_URI, contentValues);
+
+            if (uri != null) {
+                isInFavs = true;
+                changeFavsStar();
+                Toast.makeText(this, "Added to Favorites", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        changeFavsStar();
+
+    }
+
+
 
 }
