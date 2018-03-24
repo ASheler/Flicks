@@ -62,12 +62,14 @@ public class TrailersAdapter extends RecyclerView.Adapter<TrailersAdapter.Traile
     public class TrailersViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView trailerName;
+        View lowerLine;
 
         //initialize IDs in ViewHolder
         public TrailersViewHolder(View itemView) {
             super(itemView);
 
             trailerName = itemView.findViewById(R.id.trailer_name);
+            lowerLine = itemView.findViewById(R.id.trailer_separator);
 
             itemView.setOnClickListener(this);
         }
@@ -75,6 +77,10 @@ public class TrailersAdapter extends RecyclerView.Adapter<TrailersAdapter.Traile
         //Bind data - set content
         void bind(int index) {
             trailerName.setText(mTrailers[index].getName());
+            //hide last line in view
+            if (index == getItemCount()-1){
+                lowerLine.setVisibility(View.INVISIBLE);
+            }
         }
 
         @Override
