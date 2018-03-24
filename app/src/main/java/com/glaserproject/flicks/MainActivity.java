@@ -3,7 +3,6 @@ package com.glaserproject.flicks;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -20,8 +19,6 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.glaserproject.flicks.Favorites.FavoritesContract;
-import com.glaserproject.flicks.Favorites.PassFavsToMovie;
 import com.glaserproject.flicks.MyObjects.Movie;
 import com.glaserproject.flicks.Utils.BaseViewModel;
 import com.glaserproject.flicks.Utils.ConstantsClass;
@@ -39,11 +36,8 @@ public class MainActivity extends AppCompatActivity implements
     TileAdapter mTileAdapter;
     RecyclerView mMoviesRV;
     int currentSelection;
-
-    private BaseViewModel viewModel;
-
     Movie[] movies;
-
+    private BaseViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements
         viewModel = ViewModelProviders.of(this).get(BaseViewModel.class);
 
         //check and setup viewModel
-        if (viewModel.isFilled()){
+        if (viewModel.isFilled()) {
             currentSelection = viewModel.getCurrentSelection();
             movies = viewModel.getMovie();
         } else {
@@ -74,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements
         GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
 
         //set AutoMeasure Off to fully load on screen
-        layoutManager.setAutoMeasureEnabled(false);
+        //layoutManager.setAutoMeasureEnabled(false);
         mMoviesRV.setLayoutManager(layoutManager);
         mMoviesRV.setHasFixedSize(true);
         //Initialize empty TileAdapter for better performance
@@ -103,9 +97,9 @@ public class MainActivity extends AppCompatActivity implements
     public void onClick(Movie movie) {
         //onClick leads to Detail Activity
         Intent intent = new Intent(this, DetailActivity.class);
-
+        //send movie object
         intent.putExtra(ConstantsClass.SELECTED_MOVIE_EXTRA_KEY, movie);
-
+        //start Detail Activity
         startActivity(intent);
     }
 
@@ -142,37 +136,40 @@ public class MainActivity extends AppCompatActivity implements
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 currentSelection = position;
-//check if we have data loaded already
+
+                //check if we have data loaded in ViewModel
                 //if we have data - load it
-                if (viewModel.isFilled() && position == viewModel.getCurrentSelection()){
+                if (viewModel.isFilled() && position == viewModel.getCurrentSelection()) {
                     updateUI(viewModel.getMovie());
 
                     //if not - fetch it
                 } else {                //If connection available - load!
-                if (isNetworkAvailable(MainActivity.this)) {
-                    //hide Reload Button
-                    reloadButton.setVisibility(View.GONE);
-                    //connected - load data
-                    if (currentSelection != 4) {new LoadFetchJSONmovies(position, new LoadFetchJSONCompleteListener()).execute();} else {
-                        new LoadFetchDbFavs(getApplicationContext(), new LoadFetchDbFavsCompleteListener()).execute();
-
-}                } else {
-                    //hide Reload Button
-                    reloadButton.setVisibility(View.VISIBLE);
-                    //set error message on no connection
-                    Toast.makeText(MainActivity.this, R.string.no_connection_toast, Toast.LENGTH_SHORT).show();
-                //clear ui and set null data to rv
+                    if (isNetworkAvailable(MainActivity.this)) {
+                        //hide Reload Button
+                        reloadButton.setVisibility(View.GONE);
+                        //connected - load data
+                        //check if favorites
+                        if (currentSelection != 4) {
+                            //load from JSON
+                            new LoadFetchJSONmovies(position, new LoadFetchJSONCompleteListener()).execute();
+                        } else {
+                            //load favorites from db
+                            new LoadFetchDbFavs(getApplicationContext(), new LoadFetchDbFavsCompleteListener()).execute();
+                        }
+                    } else {
+                        //hide Reload Button
+                        reloadButton.setVisibility(View.VISIBLE);
+                        //set error message on no connection
+                        Toast.makeText(MainActivity.this, R.string.no_connection_toast, Toast.LENGTH_SHORT).show();
+                        //clear ui and set null data to rv
                         mTileAdapter.setNullData();
-
-
                     }
                 }
-
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
+                //nothing selected - do nothing
             }
         });
 
@@ -180,8 +177,16 @@ public class MainActivity extends AppCompatActivity implements
         return true;
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (currentSelection == 4) {
+            //TODO: notify change in dataset
+        }
+    }
+
     //listener for JSON fetcher class
-    public class LoadFetchJSONCompleteListener implements LoadFetchJSONmovies.AsyncTaskCompleteListener<Movie[]>{
+    public class LoadFetchJSONCompleteListener implements LoadFetchJSONmovies.AsyncTaskCompleteListener<Movie[]> {
 
         @Override
         public void onTaskBegin() {
@@ -204,27 +209,21 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
-
-
-    public class LoadFetchDbFavsCompleteListener implements LoadFetchDbFavs.AsyncTaskCompleteListener<Movie[]>{
+    //Favorites Complete Listener
+    public class LoadFetchDbFavsCompleteListener implements LoadFetchDbFavs.AsyncTaskCompleteListener<Movie[]> {
 
         @Override
         public void onTaskBegin() {
+            //show loading button
             loadingIndicatorPB.setVisibility(View.VISIBLE);
         }
 
         @Override
         public void onTaskComplete(Movie[] movies) {
+            //hide loading button
             loadingIndicatorPB.setVisibility(View.INVISIBLE);
+            //update UI with loaded Fav movies
             updateUI(movies);
-        }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (currentSelection == 4){
-            //notify change in dataset
         }
     }
 }

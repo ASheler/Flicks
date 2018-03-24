@@ -10,22 +10,23 @@ import com.glaserproject.flicks.Favorites.PassFavsToMovie;
 import com.glaserproject.flicks.MyObjects.Movie;
 
 /**
- * Created by ondra on 3/24/2018.
+ * Class for fetching Favorites from Db
  */
 
 public class LoadFetchDbFavs extends AsyncTask<Movie[], Void, Movie[]> {
 
 
-    Context context;
+    private Context context;
 
+    //interface Listener
     public interface AsyncTaskCompleteListener<T> {
         void onTaskBegin();
         void onTaskComplete(T movies);
-
     }
 
     private AsyncTaskCompleteListener<Movie[]> listener;
 
+    //initialize AsyncTask
     public LoadFetchDbFavs(Context context, AsyncTaskCompleteListener<Movie[]> listener){
         this.listener = listener;
         this.context = context;
@@ -39,19 +40,24 @@ public class LoadFetchDbFavs extends AsyncTask<Movie[], Void, Movie[]> {
 
     @Override
     protected Movie[] doInBackground(Movie[]... movies) {
+
+        //setup Cursor
         Cursor cursor;
+
         try {
+            //get Cursor from contentProvider
             cursor = context.getContentResolver().query(FavoritesContract.FavoritesEntry.CONTENT_URI,
                     null,
                     null,
                     null,
                     FavoritesContract.FavoritesEntry._ID);
         } catch (Exception e){
-            Log.e("HOVNOOOO", "FAILED TO LOAD DATA");
             e.printStackTrace();
             return null;
         }
+        //parse cursor to Movie[]
         Movie[] movie = PassFavsToMovie.passFromCursor(cursor);
+        //return Movie[]
         return movie;
     }
 

@@ -5,15 +5,17 @@ import android.database.Cursor;
 import com.glaserproject.flicks.MyObjects.Movie;
 
 /**
- * Created by ondra on 3/24/2018.
+ * Class for passing cursor to Movie[] object
  */
 
 public class PassFavsToMovie {
 
     public static Movie[] passFromCursor (Cursor cursor){
+        //setup Movie[] object
         int count = cursor.getCount();
         Movie[] mMovie = new Movie[count];
 
+        //fill the object
         if (cursor.moveToNext()){
             do{
                 String title = cursor.getString(cursor.getColumnIndex(FavoritesContract.FavoritesEntry.COLUMN_MOVIE_TITLE));
@@ -25,20 +27,6 @@ public class PassFavsToMovie {
                 mMovie[cursor.getPosition()] = tempMovie;
             }while ((cursor.moveToNext()));
         }
-
-
-/*
-
-        int position1 = cursor.getPosition();
-        while (cursor.moveToNext()){
-            int position = cursor.getPosition()+1;
-            //mMovie[position].setMovieTitle("prdel");
-            mMovie[position].setId(338970);
-            mMovie[position].setPosterPath("dnxU4TaXKuFTv9kv6XEGyWEaD7v");
-            mMovie[position].setReleaseDate("hovnooooo");
-        }
-*/
-
         return mMovie;
     }
 }

@@ -9,7 +9,7 @@ import android.provider.BaseColumns;
 
 public class FavoritesContract {
 
-
+    //Content provider constants
     public static final String AUTHORITY = "com.glaserproject.flicks";
     public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + AUTHORITY);
     public static final String PATH_FAVORITES = "favorites";
@@ -18,8 +18,11 @@ public class FavoritesContract {
 
     public static final class FavoritesEntry implements BaseColumns {
 
+        //Content URI
         public static Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_FAVORITES).build();
 
+
+        //Db Table constants
         public static final String TABLE_NAME = "favorites";
 
         public static final String COLUMN_MOVIE_ID = "movie_id";

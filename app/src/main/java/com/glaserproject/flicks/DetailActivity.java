@@ -105,7 +105,7 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
         }
 
 
-        //get MovieID and Backdrop
+        //get MovieID, posterPath and Backdrop
         movieID = movie.getId();
         backdropPath = movie.getBackdropPath();
         posterPath = movie.getPosterPath();
@@ -117,8 +117,7 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
         //get Release Date
         releaseDate = movie.getReleaseDate();
 
-
-
+        //check if movie is in Favorites
         checkIfInFavs();
 
 
@@ -170,6 +169,7 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
             }
         }
 
+        //setup Favorite Star OnClickListener
         favsStarIV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -183,10 +183,6 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
     }
 
     public void updateUI(Movie movie) {
-
-
-        changeFavsStar();
-
 
         //first make UI elements visible
         showUIelements();
@@ -209,6 +205,9 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
 
         //set reviews
         mReviewsAdapter.setReviewsData(movie.getReviews());
+
+        //Change Favorites Star accordingly
+        changeFavsStar();
 
 
     }
@@ -238,7 +237,7 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
 
     @Override
     public void onTrailerClick(String videoKey) {
-
+        //run intent on trailer icon click
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(ConstantsClass.URL_YOUTUBUE_VIDEO_BASE).buildUpon()
                 .appendQueryParameter(ConstantsClass.URL_YOUTUBE_VIEW_KEY_STRING, videoKey)
                 .build());
@@ -267,58 +266,83 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
         }
     }
 
+    //change star accordingly to the state
     public void changeFavsStar(){
+        //if movie is in favorites
         if (isInFavs){
+            //set gold star
             favsStarIV.setImageResource(R.drawable.ic_favs_star_gold);
         } else {
+            //if not -> set gray star
             favsStarIV.setImageResource(R.drawable.ic_favs_star_grey);
         }
 
     }
 
+    //check if movie is in favorites
     public void checkIfInFavs(){
+        //get cursor from Content Provider
         Cursor cursor = getContentResolver().query(FavoritesContract.FavoritesEntry.CONTENT_URI, null, FavoritesContract.FavoritesEntry.COLUMN_MOVIE_ID + "=?", new String[]{Integer.toString(movieID)}, null);
-        int lenght = cursor.getCount();
-        if (lenght > 0){
-            //in favs
+        int length = cursor.getCount();
+        //check length of cursor
+        //if length > 0 -> movie is in favorites
+        if (length > 0){
+            //movie is in favorites
             isInFavs = true;
         } else {
+            //movie is not in favorites
             isInFavs = false;
         }
+        //change star accordingly
         changeFavsStar();
     }
 
 
 
-
+    //click action on star
     public void favsStarClick (){
+        //first check if is in favs already
         if (isInFavs){
+            //movie is in favorites -> use ContentProvider to delete it
+
+            //setup URI with movie ID
             Uri uri = FavoritesContract.FavoritesEntry.CONTENT_URI;
             uri = uri.buildUpon().appendPath(Integer.toString(movieID)).build();
+
+            //get Content Resolver and delete rows
             getContentResolver().delete(uri, null, null);
-            Toast.makeText(this, "Removed from Favorites", Toast.LENGTH_SHORT).show();
+
+            //notify user
+            Toast.makeText(this, R.string.removed_from_favs_text, Toast.LENGTH_SHORT).show();
+
+            //change state of star
             isInFavs = false;
             changeFavsStar();
         } else {
+            //movie is not in favorites currently
 
+            //setup Content Values
             ContentValues contentValues = new ContentValues();
-
+            //put info into contentValues
             contentValues.put(FavoritesContract.FavoritesEntry.COLUMN_MOVIE_ID, movieID);
             contentValues.put(FavoritesContract.FavoritesEntry.COLUMN_MOVIE_TITLE, movieTitle);
             contentValues.put(FavoritesContract.FavoritesEntry.COLUMN_POSTER_PATH, posterPath);
             contentValues.put(FavoritesContract.FavoritesEntry.COLUMN_BACKDROP_PATH, backdropPath);
             contentValues.put(FavoritesContract.FavoritesEntry.COLUMN_RELEASE_DATE, releaseDate);
 
+            //put contentValues to db through Content Provider
             Uri uri = getContentResolver().insert(FavoritesContract.FavoritesEntry.CONTENT_URI, contentValues);
 
+            //check if insertion was successful
             if (uri != null) {
+                //change state of star
                 isInFavs = true;
                 changeFavsStar();
-                Toast.makeText(this, "Added to Favorites", Toast.LENGTH_SHORT).show();
+
+                //notify user
+                Toast.makeText(this, R.string.added_to_favs_text, Toast.LENGTH_SHORT).show();
             }
         }
-
-        changeFavsStar();
 
     }
 

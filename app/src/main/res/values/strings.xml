@@ -18,4 +18,6 @@
     <string name="no_connection_toast">No connection Available. Try again later.</string>
     <string name="trailers_label_text">Trailers</string>
     <string name="reviews_label_text">Reviews</string>
+    <string name="added_to_favs_text">Added to Favorites</string>
+    <string name="removed_from_favs_text">Removed from Favorites</string>
 </resources>
