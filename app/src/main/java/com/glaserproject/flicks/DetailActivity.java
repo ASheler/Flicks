@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.glaserproject.flicks.Favorites.FavoritesContract;
 import com.glaserproject.flicks.MyObjects.Movie;
 import com.glaserproject.flicks.RvAdapter.ReviewsAdapeter;
+import com.glaserproject.flicks.RvAdapter.TileAdapter;
 import com.glaserproject.flicks.RvAdapter.TrailersAdapter;
 import com.glaserproject.flicks.Utils.ConstantsClass;
 import com.glaserproject.flicks.Utils.LoadFetchJSONmovieDetail;
@@ -58,6 +59,7 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
 
     String movieTitle;
     String backdropPath;
+    String posterPath;
     boolean isInFavs;
 
 
@@ -86,6 +88,7 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
         //get MovieID and Backdrop
         movieID = movie.getId();
         backdropPath = movie.getBackdropPath();
+        posterPath = movie.getPosterPath();
 
         //set Title
         movieTitle = movie.getMovieTitle();
@@ -229,7 +232,6 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
             //update UI
             updateUI(movie);
 
-
         }
     }
 
@@ -271,7 +273,9 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
 
             contentValues.put(FavoritesContract.FavoritesEntry.COLUMN_MOVIE_ID, movieID);
             contentValues.put(FavoritesContract.FavoritesEntry.COLUMN_MOVIE_TITLE, movieTitle);
-            contentValues.put(FavoritesContract.FavoritesEntry.COLUMN_POSTER_PATH, backdropPath);
+            contentValues.put(FavoritesContract.FavoritesEntry.COLUMN_POSTER_PATH, posterPath);
+            contentValues.put(FavoritesContract.FavoritesEntry.COLUMN_BACKDROP_PATH, backdropPath);
+            contentValues.put(FavoritesContract.FavoritesEntry.COLUMN_RELEASE_DATE, releaseDate);
 
             Uri uri = getContentResolver().insert(FavoritesContract.FavoritesEntry.CONTENT_URI, contentValues);
 

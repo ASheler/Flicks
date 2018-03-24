@@ -65,10 +65,22 @@ public class Movie implements Parcelable{
 
     }
 
+    public Movie(int id, String movieTitle, String posterPath, String releaseDate, String backdropPath){
+        this.id = id;
+        this.movieTitle = movieTitle;
+        this.posterPath = posterPath;
+        this.releaseDate = releaseDate;
+        this.backdropPath = backdropPath;
+    }
+
 
     //getters
     public int getId() {
         return id;
+    }
+
+    public void setId(int id){
+        this.id = id;
     }
 
     public int getVoteCount() {
@@ -83,12 +95,20 @@ public class Movie implements Parcelable{
         return movieTitle;
     }
 
+    public void setMovieTitle(String movieTitle){
+        this.movieTitle = movieTitle;
+    }
+
     public String getPopularity() {
         return popularity;
     }
 
     public String getPosterPath() {
         return posterPath;
+    }
+
+    public void setPosterPath(String posterPath) {
+        this.posterPath = posterPath;
     }
 
     public String getOrigLang() {
@@ -107,7 +127,7 @@ public class Movie implements Parcelable{
         return backdropPath;
     }
 
-    public boolean getAdult() {
+    public boolean setAdult() {
         return adult;
     }
 
@@ -117,6 +137,10 @@ public class Movie implements Parcelable{
 
     public String getReleaseDate() {
         return releaseDate;
+    }
+
+    public void setReleaseDate(String releaseDate){
+        this.releaseDate = releaseDate;
     }
 
     public String getTagline() {
@@ -157,6 +181,7 @@ public class Movie implements Parcelable{
         dest.writeString(backdropPath);
         dest.writeString(movieTitle);
         dest.writeString(releaseDate);
+        dest.writeString(posterPath);
     }
 
     //Parcel IN
@@ -165,6 +190,7 @@ public class Movie implements Parcelable{
         backdropPath = in.readString();
         movieTitle = in.readString();
         releaseDate = in.readString();
+        posterPath = in.readString();
     }
 
     @Override

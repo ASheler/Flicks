@@ -2,6 +2,7 @@ package com.glaserproject.flicks;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,8 +19,11 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.glaserproject.flicks.Favorites.FavoritesContract;
+import com.glaserproject.flicks.Favorites.PassFavsToMovie;
 import com.glaserproject.flicks.MyObjects.Movie;
 import com.glaserproject.flicks.Utils.ConstantsClass;
+import com.glaserproject.flicks.Utils.LoadFetchDbFavs;
 import com.glaserproject.flicks.Utils.LoadFetchJSONmovies;
 import com.glaserproject.flicks.RvAdapter.TileAdapter;
 
@@ -122,13 +126,17 @@ public class MainActivity extends AppCompatActivity implements
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 currentSelection = position;
+
                 //If connection available - load!
                 if (isNetworkAvailable(MainActivity.this)) {
                     //hide Reload Button
                     reloadButton.setVisibility(View.GONE);
                     //connected - load data
-                    new LoadFetchJSONmovies(position, new LoadFetchJSONCompleteListener()).execute();
-
+                    if (currentSelection != 4) {
+                        new LoadFetchJSONmovies(position, new LoadFetchJSONCompleteListener()).execute();
+                    } else {
+                        new LoadFetchDbFavs(getApplicationContext(), new LoadFetchDbFavsCompleteListener()).execute();
+                    }
                 } else {
                     //hide Reload Button
                     reloadButton.setVisibility(View.VISIBLE);
@@ -167,5 +175,25 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
+    public class LoadFetchDbFavsCompleteListener implements LoadFetchDbFavs.AsyncTaskCompleteListener<Movie[]>{
 
+        @Override
+        public void onTaskBegin() {
+            loadingIndicatorPB.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        public void onTaskComplete(Movie[] movies) {
+            loadingIndicatorPB.setVisibility(View.INVISIBLE);
+            updateUI(movies);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (currentSelection == 4){
+            //notify change in dataset
+        }
+    }
 }
