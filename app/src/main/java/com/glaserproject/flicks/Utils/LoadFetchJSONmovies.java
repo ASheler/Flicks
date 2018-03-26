@@ -11,28 +11,17 @@ import java.net.URL;
  */
 
 
-
-
-
 public class LoadFetchJSONmovies extends AsyncTask<Movie[], Void, Movie[]> {
-
-    public interface AsyncTaskCompleteListener<T> {
-        void onTaskBegin();
-        void onTaskComplete(T movies);
-
-    }
-
 
     private int currentSelection;
     private AsyncTaskCompleteListener<Movie[]> listener;
-
-    public LoadFetchJSONmovies(int currentSelection, AsyncTaskCompleteListener<Movie[]> listener){
+    public LoadFetchJSONmovies(int currentSelection, AsyncTaskCompleteListener<Movie[]> listener) {
         this.currentSelection = currentSelection;
         this.listener = listener;
     }
 
     @Override
-    protected void onPreExecute(){
+    protected void onPreExecute() {
         super.onPreExecute();
         listener.onTaskBegin();
     }
@@ -60,6 +49,13 @@ public class LoadFetchJSONmovies extends AsyncTask<Movie[], Void, Movie[]> {
     protected void onPostExecute(Movie[] movies) {
         super.onPostExecute(movies);
         listener.onTaskComplete(movies);
+    }
+
+    public interface AsyncTaskCompleteListener<T> {
+        void onTaskBegin();
+
+        void onTaskComplete(T movies);
+
     }
 
 }

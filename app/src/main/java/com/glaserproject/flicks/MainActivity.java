@@ -110,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements
     //update UI with new data
     public void updateUI(Movie[] movies) {
 
-        if (movies.length == 0){
+        if (movies.length == 0) {
             noFavsSavedTV.setVisibility(View.VISIBLE);
         } else {
             noFavsSavedTV.setVisibility(View.GONE);
@@ -188,6 +188,15 @@ public class MainActivity extends AppCompatActivity implements
         return true;
     }
 
+    //check if favorites changed -> if so, reload the list
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1) {
+            if (resultCode == Activity.RESULT_OK && currentSelection == 4 && data.getBooleanExtra("hovno", false)) {
+                new LoadFetchDbFavs(getApplicationContext(), new LoadFetchDbFavsCompleteListener()).execute();
+            }
+        }
+    }
 
     //listener for JSON fetcher class
     public class LoadFetchJSONCompleteListener implements LoadFetchJSONmovies.AsyncTaskCompleteListener<Movie[]> {
@@ -233,16 +242,6 @@ public class MainActivity extends AppCompatActivity implements
 
             //update UI with loaded Fav movies
             updateUI(movies);
-        }
-    }
-
-    //check if favorites changed -> if so, reload the list
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 1){
-            if (resultCode == Activity.RESULT_OK && currentSelection == 4 && data.getBooleanExtra("hovno", false)) {
-                new LoadFetchDbFavs(getApplicationContext(), new LoadFetchDbFavsCompleteListener()).execute();
-            }
         }
     }
 }

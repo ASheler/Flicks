@@ -36,31 +36,52 @@ import java.text.NumberFormat;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class DetailActivity extends AppCompatActivity implements TrailersAdapter.TrailersAdapterOnClickHandler{
+public class DetailActivity extends AppCompatActivity implements TrailersAdapter.TrailersAdapterOnClickHandler {
 
     int movieID;
     //Bind Views with ButterKnife
-    @BindView(R.id.tagline_tv) TextView taglineTV;
-    @BindView(R.id.overview_tv) TextView overviewTV;
-    @BindView(R.id.overview_label_tv) TextView overviewLabelTV;
-    @BindView(R.id.budget_tv) TextView budgetTV;
-    @BindView(R.id.budget_label_tv) TextView budgetLabelTV;
-    @BindView(R.id.revenue_tv) TextView revenueTV;
-    @BindView(R.id.revenue_label_tv) TextView revenueLabelTV;
-    @BindView(R.id.popularity_tv) TextView popularityTV;
-    @BindView(R.id.popularity_label_tv) TextView popularityLabelTV;
-    @BindView(R.id.releaseDate_tv) TextView releaseDateTV;
-    @BindView(R.id.releaseDate_label_tv) TextView releaseDateLabelTV;
-    @BindView(R.id.voteAverage_tv) TextView voteAverageTV;
-    @BindView(R.id.voteAverage_label_tv) TextView voteAverageLabelTV;
-    @BindView(R.id.loading_indicator_pb) ProgressBar loadingIndicatorPB;
-    @BindView(R.id.trailers_rv) RecyclerView trailersRV;
-    @BindView(R.id.reviews_rv) RecyclerView reviewsRV;
-    @BindView(R.id.favs_star_iv) ImageView favsStarIV;
-    @BindView(R.id.line) View lineView;
-    @BindView(R.id.line2) View line2View;
-    @BindView(R.id.trailers_label_tv) TextView trailersLabelTV;
-    @BindView(R.id.reviews_label_tv) TextView reviewsLabelTV;
+    @BindView(R.id.tagline_tv)
+    TextView taglineTV;
+    @BindView(R.id.overview_tv)
+    TextView overviewTV;
+    @BindView(R.id.overview_label_tv)
+    TextView overviewLabelTV;
+    @BindView(R.id.budget_tv)
+    TextView budgetTV;
+    @BindView(R.id.budget_label_tv)
+    TextView budgetLabelTV;
+    @BindView(R.id.revenue_tv)
+    TextView revenueTV;
+    @BindView(R.id.revenue_label_tv)
+    TextView revenueLabelTV;
+    @BindView(R.id.popularity_tv)
+    TextView popularityTV;
+    @BindView(R.id.popularity_label_tv)
+    TextView popularityLabelTV;
+    @BindView(R.id.releaseDate_tv)
+    TextView releaseDateTV;
+    @BindView(R.id.releaseDate_label_tv)
+    TextView releaseDateLabelTV;
+    @BindView(R.id.voteAverage_tv)
+    TextView voteAverageTV;
+    @BindView(R.id.voteAverage_label_tv)
+    TextView voteAverageLabelTV;
+    @BindView(R.id.loading_indicator_pb)
+    ProgressBar loadingIndicatorPB;
+    @BindView(R.id.trailers_rv)
+    RecyclerView trailersRV;
+    @BindView(R.id.reviews_rv)
+    RecyclerView reviewsRV;
+    @BindView(R.id.favs_star_iv)
+    ImageView favsStarIV;
+    @BindView(R.id.line)
+    View lineView;
+    @BindView(R.id.line2)
+    View line2View;
+    @BindView(R.id.trailers_label_tv)
+    TextView trailersLabelTV;
+    @BindView(R.id.reviews_label_tv)
+    TextView reviewsLabelTV;
 
 
     String releaseDate;
@@ -71,12 +92,9 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
     String backdropPath;
     String posterPath;
     boolean isInFavs;
-    private BaseViewModel viewModel;
     Movie movie;
-
     boolean favsChanged;
-
-
+    private BaseViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,7 +119,7 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
         viewModel = ViewModelProviders.of(this).get(BaseViewModel.class);
 
         //check and setup viewModel
-        if (viewModel.getSingleMovie() != null){
+        if (viewModel.getSingleMovie() != null) {
             movie = viewModel.getSingleMovie();
         } else {
             //get Movie object from Intent
@@ -126,12 +144,9 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
         checkIfInFavs();
 
 
-
         //Load Image to Main Picture
         ImageView imageView = findViewById(R.id.imageView);
         Picasso.with(this).load(ConstantsClass.URL_PICTURE_BASE_W500 + backdropPath).into(imageView);
-
-
 
 
         //setup RecyclerView & Layout Manager for Trailers
@@ -159,7 +174,7 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
 
 
         //check if we have stored UI data
-        if (viewModel.isFilled()){
+        if (viewModel.isFilled()) {
             //if data -> show them
             updateUI(viewModel.getMovieDetail());
         } else {
@@ -181,8 +196,6 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
                 favsStarClick();
             }
         });
-
-
 
 
     }
@@ -266,32 +279,10 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
                 .startChooser();
     }
 
-
-    //listener for JSON fetcher class
-    public class LoadFetchJSONCompleteListener implements LoadFetchJSONmovieDetail.AsyncTaskCompleteListener<Movie>{
-
-        @Override
-        public void onTaskBegin() {
-            //show loading indicator
-            loadingIndicatorPB.setVisibility(View.VISIBLE);
-        }
-
-        @Override
-        public void onTaskComplete(Movie movie) {
-            //set Loading Icon INVISIBLE
-            loadingIndicatorPB.setVisibility(View.INVISIBLE);
-            //update UI
-            updateUI(movie);
-            //init Movie Detail viewModel
-            viewModel.initMovieDetail(movie);
-
-        }
-    }
-
     //change star accordingly to the state
-    public void changeFavsStar(){
+    public void changeFavsStar() {
         //if movie is in favorites
-        if (isInFavs){
+        if (isInFavs) {
             //set gold star
             favsStarIV.setImageResource(R.drawable.ic_favs_star_gold);
         } else {
@@ -300,17 +291,16 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
         }
 
 
-
     }
 
     //check if movie is in favorites
-    public void checkIfInFavs(){
+    public void checkIfInFavs() {
         //get cursor from Content Provider
         Cursor cursor = getContentResolver().query(FavoritesContract.FavoritesEntry.CONTENT_URI, null, FavoritesContract.FavoritesEntry.COLUMN_MOVIE_ID + "=?", new String[]{Integer.toString(movieID)}, null);
         int length = cursor.getCount();
         //check length of cursor
         //if length > 0 -> movie is in favorites
-        if (length > 0){
+        if (length > 0) {
             //movie is in favorites
             isInFavs = true;
         } else {
@@ -321,12 +311,10 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
         changeFavsStar();
     }
 
-
-
     //click action on star
-    public void favsStarClick (){
+    public void favsStarClick() {
         //first check if is in favs already
-        if (isInFavs){
+        if (isInFavs) {
             //movie is in favorites -> use ContentProvider to delete it
 
             //setup URI with movie ID
@@ -378,6 +366,27 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
         intent.putExtra("hovno", favsChanged);
         setResult(RESULT_OK, intent);
         super.onBackPressed();
+    }
+
+    //listener for JSON fetcher class
+    public class LoadFetchJSONCompleteListener implements LoadFetchJSONmovieDetail.AsyncTaskCompleteListener<Movie> {
+
+        @Override
+        public void onTaskBegin() {
+            //show loading indicator
+            loadingIndicatorPB.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        public void onTaskComplete(Movie movie) {
+            //set Loading Icon INVISIBLE
+            loadingIndicatorPB.setVisibility(View.INVISIBLE);
+            //update UI
+            updateUI(movie);
+            //init Movie Detail viewModel
+            viewModel.initMovieDetail(movie);
+
+        }
     }
 
 }

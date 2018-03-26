@@ -166,9 +166,9 @@
         android:layout_height="2dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:visibility="invisible"
         android:layout_marginTop="16dp"
         android:background="@color/colorPrimaryDark"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/voteAverage_tv" />
@@ -177,10 +177,10 @@
         android:id="@+id/trailers_label_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="invisible"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:text="@string/trailers_label_text"
+        android:visibility="invisible"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/line" />
 

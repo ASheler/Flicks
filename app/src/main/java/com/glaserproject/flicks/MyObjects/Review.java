@@ -9,7 +9,7 @@ public class Review {
     String name;
     String body;
 
-    public Review (String name, String body){
+    public Review(String name, String body) {
         this.name = name;
         this.body = body;
     }

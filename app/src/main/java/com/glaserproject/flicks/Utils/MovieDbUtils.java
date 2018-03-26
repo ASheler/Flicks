@@ -160,7 +160,6 @@ public class MovieDbUtils {
     }
 
 
-
     //get stream from URL
     public static String getJSONFromUrl(URL url) throws IOException {
 
@@ -265,9 +264,6 @@ public class MovieDbUtils {
 
         return reviews;
     }
-
-
-
 
 
     //Get JSON All Movies into Simple Strings

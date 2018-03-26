@@ -9,8 +9,23 @@ import java.util.List;
  * Movie Object
  */
 
-public class Movie implements Parcelable{
+public class Movie implements Parcelable {
 
+    public static final Parcelable.Creator<Movie> CREATOR =
+            new Parcelable.Creator<Movie>() {
+
+                @Override
+                public Movie createFromParcel(Parcel source) {
+                    //through parc. IN - create new Movie object
+                    return new Movie(source);
+                }
+
+                @Override
+                public Movie[] newArray(int size) {
+                    //get size
+                    return new Movie[size];
+                }
+            };
     private int id;
     private int voteCount;
     private String voteAverage;
@@ -29,7 +44,6 @@ public class Movie implements Parcelable{
     private int budget;
     private Trailer[] trailers;
     private Review[] reviews;
-
 
     public Movie() {
     }
@@ -65,8 +79,9 @@ public class Movie implements Parcelable{
 
     }
 
+
     //movie for Favorites
-    public Movie(int id, String movieTitle, String posterPath, String releaseDate, String backdropPath){
+    public Movie(int id, String movieTitle, String posterPath, String releaseDate, String backdropPath) {
         this.id = id;
         this.movieTitle = movieTitle;
         this.posterPath = posterPath;
@@ -74,13 +89,21 @@ public class Movie implements Parcelable{
         this.backdropPath = backdropPath;
     }
 
+    //Parcel IN
+    private Movie(Parcel in) {
+        id = in.readInt();
+        backdropPath = in.readString();
+        movieTitle = in.readString();
+        releaseDate = in.readString();
+        posterPath = in.readString();
+    }
 
     //getters
     public int getId() {
         return id;
     }
 
-    public void setId(int id){
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -96,7 +119,7 @@ public class Movie implements Parcelable{
         return movieTitle;
     }
 
-    public void setMovieTitle(String movieTitle){
+    public void setMovieTitle(String movieTitle) {
         this.movieTitle = movieTitle;
     }
 
@@ -140,7 +163,7 @@ public class Movie implements Parcelable{
         return releaseDate;
     }
 
-    public void setReleaseDate(String releaseDate){
+    public void setReleaseDate(String releaseDate) {
         this.releaseDate = releaseDate;
     }
 
@@ -156,24 +179,21 @@ public class Movie implements Parcelable{
         return budget;
     }
 
-    public void putTrailer (Trailer[] trailer){
+    public void putTrailer(Trailer[] trailer) {
         this.trailers = trailer;
     }
 
-    public Trailer[] getTrailers () {
+    public Trailer[] getTrailers() {
         return trailers;
     }
 
-    public void putReview (Review[] reviews){
+    public void putReview(Review[] reviews) {
         this.reviews = reviews;
     }
 
-    public Review[] getReviews (){
+    public Review[] getReviews() {
         return reviews;
     }
-
-
-
 
     //make parcelable for passing through activity
     @Override
@@ -185,34 +205,8 @@ public class Movie implements Parcelable{
         dest.writeString(posterPath);
     }
 
-    //Parcel IN
-    private Movie (Parcel in){
-        id = in.readInt();
-        backdropPath = in.readString();
-        movieTitle = in.readString();
-        releaseDate = in.readString();
-        posterPath = in.readString();
-    }
-
     @Override
     public int describeContents() {
         return 0;
     }
-
-
-    public static final Parcelable.Creator<Movie> CREATOR =
-            new Parcelable.Creator<Movie>(){
-
-                @Override
-                public Movie createFromParcel(Parcel source) {
-                    //through parc. IN - create new Movie object
-                    return new Movie(source);
-                }
-
-                @Override
-                public Movie[] newArray(int size) {
-                    //get size
-                    return new Movie[size];
-                }
-            };
 }

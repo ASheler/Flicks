@@ -17,17 +17,10 @@ public class LoadFetchDbFavs extends AsyncTask<Movie[], Void, Movie[]> {
 
 
     private Context context;
-
-    //interface Listener
-    public interface AsyncTaskCompleteListener<T> {
-        void onTaskBegin();
-        void onTaskComplete(T movies);
-    }
-
     private AsyncTaskCompleteListener<Movie[]> listener;
 
     //initialize AsyncTask
-    public LoadFetchDbFavs(Context context, AsyncTaskCompleteListener<Movie[]> listener){
+    public LoadFetchDbFavs(Context context, AsyncTaskCompleteListener<Movie[]> listener) {
         this.listener = listener;
         this.context = context;
     }
@@ -51,7 +44,7 @@ public class LoadFetchDbFavs extends AsyncTask<Movie[], Void, Movie[]> {
                     null,
                     null,
                     FavoritesContract.FavoritesEntry._ID);
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
@@ -65,5 +58,12 @@ public class LoadFetchDbFavs extends AsyncTask<Movie[], Void, Movie[]> {
     protected void onPostExecute(Movie[] movies) {
         super.onPostExecute(movies);
         listener.onTaskComplete(movies);
+    }
+
+    //interface Listener
+    public interface AsyncTaskCompleteListener<T> {
+        void onTaskBegin();
+
+        void onTaskComplete(T movies);
     }
 }

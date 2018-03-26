@@ -5,6 +5,9 @@
 
     <!-- Main Activity Strings -->
     <string name="movie_poster_content_description">Movie Poster</string>
+    <string name="no_favs_saved_text">No Favorite movies saved yet. \nYou can add movie to your favorites by clicking star icon on Movie detail screen.</string>
+    <string name="no_connection_message">NO CONNECTION AVAILABLE… \n Please check your connection and try again.</string>
+    <string name="reload">Reload</string>
 
     <!-- Detail Activity Strings -->
     <string name="overview_label">Overview:</string>
@@ -13,13 +16,10 @@
     <string name="popularity_label">Popularity</string>
     <string name="release_date_label">Release date:</string>
     <string name="vote_average_label">Vote Average</string>
-    <string name="no_connection_message">NO CONNECTION AVAILABLE… \n Please check your connection and try again.</string>
-    <string name="reload">Reload</string>
     <string name="no_connection_toast">No connection Available. Try again later.</string>
     <string name="trailers_label_text">Trailers</string>
     <string name="reviews_label_text">Reviews</string>
+    <string name="trailer_share_dialog_title">Share the Trailer</string>
     <string name="added_to_favs_text">Added to Favorites</string>
     <string name="removed_from_favs_text">Removed from Favorites</string>
-    <string name="trailer_share_dialog_title">Share the Trailer</string>
-    <string name="no_favs_saved_text">No Favorite movies saved yet. \nYou can add movie to your favorites by clicking star icon on Movie detail screen.</string>
 </resources>

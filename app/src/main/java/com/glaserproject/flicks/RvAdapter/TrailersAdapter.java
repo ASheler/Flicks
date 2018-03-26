@@ -23,14 +23,6 @@ public class TrailersAdapter extends RecyclerView.Adapter<TrailersAdapter.Traile
         mClickHandler = onClickHandler;
     }
 
-    //click Interface
-    public interface TrailersAdapterOnClickHandler {
-        void onTrailerClick(String videoKey);
-        void onTrailerLongClick(String videoName, String videoKey);
-    }
-
-
-
     @Override
     public TrailersViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
@@ -42,7 +34,6 @@ public class TrailersAdapter extends RecyclerView.Adapter<TrailersAdapter.Traile
     public void onBindViewHolder(TrailersViewHolder holder, int position) {
         holder.bind(position);
     }
-
 
     //set whole new set of data
     public void setTrailersData(Trailer[] trailers) {
@@ -58,6 +49,12 @@ public class TrailersAdapter extends RecyclerView.Adapter<TrailersAdapter.Traile
         return mTrailers.length;
     }
 
+    //click Interface
+    public interface TrailersAdapterOnClickHandler {
+        void onTrailerClick(String videoKey);
+
+        void onTrailerLongClick(String videoName, String videoKey);
+    }
 
     public class TrailersViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
@@ -79,7 +76,7 @@ public class TrailersAdapter extends RecyclerView.Adapter<TrailersAdapter.Traile
         void bind(int index) {
             trailerName.setText(mTrailers[index].getName());
             //hide last line in view
-            if (index == getItemCount()-1){
+            if (index == getItemCount() - 1) {
                 lowerLine.setVisibility(View.INVISIBLE);
             }
         }

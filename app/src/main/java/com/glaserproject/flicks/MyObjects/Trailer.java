@@ -10,19 +10,21 @@ public class Trailer {
     private String mName;
     private String mSite;
 
-    public Trailer (String key, String name, String site){
+    public Trailer(String key, String name, String site) {
         this.mKey = key;
         this.mName = name;
         this.mSite = site;
     }
 
-    public String getKey () {
+    public String getKey() {
         return mKey;
     }
-    public String getName () {
+
+    public String getName() {
         return mName;
     }
-    public String getSite (){
+
+    public String getSite() {
         return mSite;
     }
 }

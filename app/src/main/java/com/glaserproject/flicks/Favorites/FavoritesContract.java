@@ -15,21 +15,17 @@ public class FavoritesContract {
     public static final String PATH_FAVORITES = "favorites";
 
 
-
     public static final class FavoritesEntry implements BaseColumns {
-
-        //Content URI
-        public static Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_FAVORITES).build();
-
 
         //Db Table constants
         public static final String TABLE_NAME = "favorites";
-
         public static final String COLUMN_MOVIE_ID = "movie_id";
         public static final String COLUMN_MOVIE_TITLE = "movie_title";
         public static final String COLUMN_POSTER_PATH = "poster_path";
         public static final String COLUMN_BACKDROP_PATH = "backdrop_path";
         public static final String COLUMN_RELEASE_DATE = "release_date";
+        //Content URI
+        public static Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_FAVORITES).build();
     }
 
 }

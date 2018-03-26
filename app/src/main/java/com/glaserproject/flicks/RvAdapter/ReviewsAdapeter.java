@@ -18,6 +18,10 @@ public class ReviewsAdapeter extends RecyclerView.Adapter<ReviewsAdapeter.Review
 
     private Review[] mReviews;
 
+    //initialize empty
+    public ReviewsAdapeter() {
+    }
+
     @NonNull
     @Override
     public ReviewsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -27,8 +31,6 @@ public class ReviewsAdapeter extends RecyclerView.Adapter<ReviewsAdapeter.Review
         return new ReviewsViewHolder(view);
 
     }
-    //initialize empty
-    public ReviewsAdapeter(){}
 
     //set whole new set of data
     public void setReviewsData(Review[] reviews) {
@@ -43,13 +45,13 @@ public class ReviewsAdapeter extends RecyclerView.Adapter<ReviewsAdapeter.Review
 
     @Override
     public int getItemCount() {
-        if (mReviews == null){
+        if (mReviews == null) {
             return 0;
         }
         return mReviews.length;
     }
 
-    public class ReviewsViewHolder extends RecyclerView.ViewHolder{
+    public class ReviewsViewHolder extends RecyclerView.ViewHolder {
 
         TextView reviewName;
         TextView reviewBody;

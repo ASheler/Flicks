@@ -17,48 +17,48 @@ public class BaseViewModel extends ViewModel {
     private Movie movieDetail;
 
     //initialize for Main Activity
-    public void init (Movie[] movies, int currentSelection){
+    public void init(Movie[] movies, int currentSelection) {
         this.mMovie = movies;
         this.mCurrentSelection = currentSelection;
         this.isFilled = true;
     }
 
-    public void initSingleMovie(Movie movie){
+    public void initSingleMovie(Movie movie) {
         this.singleMovie = movie;
     }
 
     //init for Detail Activity
-    public void initMovieDetail (Movie movie){
+    public void initMovieDetail(Movie movie) {
         this.movieDetail = movie;
         this.isFilled = true;
     }
 
-    public Movie getMovieDetail (){
+    public Movie getMovieDetail() {
         return movieDetail;
-    }
-
-    public void setMovie (Movie[] movie){
-        this.mMovie = movie;
     }
 
     public Movie[] getMovie() {
         return mMovie;
     }
 
-    public void setCurrentSelection (int currentSelection) {
-        this.mCurrentSelection = currentSelection;
+    public void setMovie(Movie[] movie) {
+        this.mMovie = movie;
     }
 
-    public int getCurrentSelection () {
+    public int getCurrentSelection() {
         return mCurrentSelection;
     }
 
-    public Movie getSingleMovie (){
+    public void setCurrentSelection(int currentSelection) {
+        this.mCurrentSelection = currentSelection;
+    }
+
+    public Movie getSingleMovie() {
         return singleMovie;
     }
 
     //get filled state
-    public boolean isFilled (){
+    public boolean isFilled() {
         return isFilled;
     }
 

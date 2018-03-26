@@ -52,11 +52,10 @@ public class TileAdapter extends RecyclerView.Adapter<TileAdapter.TileViewHolder
     }
 
     //set null data
-    public void setNullData(){
+    public void setNullData() {
         mMovies = null;
         notifyDataSetChanged();
     }
-
 
 
     //set whole new set of data

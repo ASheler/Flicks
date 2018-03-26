@@ -12,7 +12,6 @@ import android.support.annotation.Nullable;
 
 /**
  * Content provider class for Favorites
- *
  */
 
 public class FavoritesContentProvider extends ContentProvider {
@@ -21,8 +20,10 @@ public class FavoritesContentProvider extends ContentProvider {
     public static final int FAVORITES_WITH_ID = 101;
 
     private static final UriMatcher sUriMatcher = buildUriMatcher();
+    //setup DbHelper
+    private FavoritesDbHelper mFavoritesDbHelper;
 
-    public static UriMatcher buildUriMatcher (){
+    public static UriMatcher buildUriMatcher() {
         UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
         //add URIs to check with matcher
@@ -33,9 +34,6 @@ public class FavoritesContentProvider extends ContentProvider {
 
         return uriMatcher;
     }
-
-    //setup DbHelper
-    private FavoritesDbHelper mFavoritesDbHelper;
 
     @Override
     public boolean onCreate() {
@@ -118,7 +116,7 @@ public class FavoritesContentProvider extends ContentProvider {
                 long id = dbHelper.insert(FavoritesContract.FavoritesEntry.TABLE_NAME, null, values);
 
                 //check insertion status
-                if (id > 0){
+                if (id > 0) {
                     //successful
                     returnUri = ContentUris.withAppendedId(FavoritesContract.FavoritesEntry.CONTENT_URI, id);
                 } else {
@@ -153,7 +151,7 @@ public class FavoritesContentProvider extends ContentProvider {
 
         int favsDeleted;
 
-        switch (match){
+        switch (match) {
             case FAVORITES_WITH_ID:
                 //delete row in db
                 favsDeleted = dbHelper.delete(FavoritesContract.FavoritesEntry.TABLE_NAME,
@@ -164,7 +162,7 @@ public class FavoritesContentProvider extends ContentProvider {
                 throw new UnsupportedOperationException("Unknown Uri: " + uri);
         }
 
-        if (favsDeleted != 0){
+        if (favsDeleted != 0) {
             getContext().getContentResolver().notifyChange(uri, null);
         }
 
