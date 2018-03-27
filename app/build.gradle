@@ -11,6 +11,8 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         // API key from themoviedb.org needs to be used. Hidden for security reasons
+        //# MovieDB api key format in gradle.properties:
+        //MOVIEDB_API_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
         buildConfigField("String", "API_KEY", MOVIEDB_API_KEY)
 
     }
