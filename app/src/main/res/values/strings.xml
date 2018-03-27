@@ -22,4 +22,6 @@
     <string name="trailer_share_dialog_title">Share the Trailer</string>
     <string name="added_to_favs_text">Added to Favorites</string>
     <string name="removed_from_favs_text">Removed from Favorites</string>
+    <string name="favorites_star_content_description">Favorites Star</string>
+    <string name="youtube_logo_content_description">YouTube Logo</string>
 </resources>

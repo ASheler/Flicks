@@ -307,6 +307,7 @@ public class DetailActivity extends AppCompatActivity implements TrailersAdapter
             //movie is not in favorites
             isInFavs = false;
         }
+        cursor.close();
         //change star accordingly
         changeFavsStar();
     }
