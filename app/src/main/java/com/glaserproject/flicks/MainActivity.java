@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -69,7 +70,7 @@ public class MainActivity extends AppCompatActivity implements
         }
 
         //setup RecyclerView & Layout Manager
-        GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
+        GridLayoutManager layoutManager = new GridLayoutManager(this, calculateNoOfColumns(this));
 
         //set AutoMeasure Off to fully load on screen
         //layoutManager.setAutoMeasureEnabled(false);
@@ -244,4 +245,19 @@ public class MainActivity extends AppCompatActivity implements
             updateUI(movies);
         }
     }
+
+    //calc the number of columns to create
+    public static int calculateNoOfColumns(Context context) {
+        //get Display Metrics
+        DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+        float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
+        //min width for column
+        int scalingFactor = 180;
+        int noOfColumns = (int) (dpWidth / scalingFactor);
+        //set at least 2 columns
+        if(noOfColumns < 2)
+            noOfColumns = 2;
+        return noOfColumns;
+    }
+
 }
